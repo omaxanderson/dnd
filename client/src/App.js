@@ -2,30 +2,34 @@ import React from 'react';
 import {
 	BrowserRouter as Router,
 	Route,
-	Redirect,
-	withRouter
+	Redirect
 } from 'react-router-dom';
 import Login from './auth/Login';
+import Logout from './auth/Logout';
 import Home from './Home';
+const cookies = require('browser-cookies');
 
 
 // set up our authentication state
 const Auth = {
 	isAuthenticated: false,
-	sessionCookie: '',
+	accessToken: cookies.get('accessToken'),
 	authenticate(next) {
 		this.isAuthenticated = true;
-		setTimeout(() => {
-			next(JSON.stringify({
-				status: 200,
-				message: 'Authenticated'
-			}));
-		}, 1000);
+		cookies.set('accessToken', 'abcdefg');
+		this.accessToken = cookies.get('accessToken');
+		next(JSON.stringify({
+			status: 200,
+			message: 'Authenticated'
+		}));
 	},
-	logout(next) {
-		this.isAuthenticated = false;
-		console.log('fake logout!');
-		next();
+	logout() {
+		return new Promise((resolve, reject) => {
+			this.isAuthenticated = false;
+			cookies.erase('accessToken');
+			console.log('fake logout!');
+			resolve('success!');
+		});
 	}
 };
 
@@ -44,17 +48,28 @@ function App() {
 						)
 					}}
 				/>
+				<Route path='/logout' 
+					render={props => {
+						return(
+							<Logout
+								{...props}
+								auth={ Auth }
+							/>
+						)
+					}}
+				/>
 			</div>
 		</Router>
 	);
 }
 
 function PrivateRoute({ component: Component, ...rest }) {
+	console.log(Auth);
 	return (
 		<Route
 			{...rest}
 			render={ props => 
-				Auth.isAuthenticated ? (
+				Auth.accessToken ? (
 					<Component {...props} />
 				) : (
 					<Redirect

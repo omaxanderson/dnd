@@ -1,6 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom'
 import Card from '../components/Card';
+const cookies = require('browser-cookies');
 
 class Login extends React.Component {
 	constructor(props) {
@@ -12,6 +13,10 @@ class Login extends React.Component {
 	}
 
 	render() {
+		if (cookies.get('accessToken')) {
+			return <Redirect to='/' />;
+		}
+
 		let { from } = this.props.location.state || { from: { pathname: '/' } };
 		let { redirectToReferrer } = this.state;
 
