@@ -37,10 +37,10 @@ function up() {
 		.then(result =>{
 			fs.appendFileSync(
 				'migration_log', 
-				\`\$\{__filename\} has run successfully on \$\{ date.toLocaleString(options) \}\`
+				\`\$\{path.basename(__filename)\} UP has run successfully on \$\{ date.toLocaleString(options) \}\\n\`
 			);
 			console.log(
-				\`\$\{__filename\} has run successfully on \$\{ date.toLocaleString(options) \}\`
+				\`\$\{path.basename(__filename)\} has run successfully on \$\{ date.toLocaleString(options) \}\`
 			);
 		})
 		.catch(err => {
@@ -55,9 +55,9 @@ function down() {
 		.then(result => {
 			fs.appendFileSync(
 				'migration_log', 
-				\`\${__filename} has run successfully on \${ date.toLocaleString(options) }\`
+				\`\${path.basename(__filename)} DOWN has run successfully on \${ date.toLocaleString(options) }\\n\`
 			);
-			console.log(\`\${__filename} has run successfully on \${ date.toLocaleString(options) }\`);
+			console.log(\`\${path.basename(__filename)} has run successfully on \${ date.toLocaleString(options) }\`);
 		})
 		.catch(err => {
 			console.log(err);
