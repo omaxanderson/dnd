@@ -18,7 +18,7 @@ fs.readdir('.', (err, files) => {
 	});
 });
 
-fs.writeFileSync(filename,
+fs.writeFileSync(`${filename}.js`,
 `const db = require('../database/db');
 const fs = require('fs');
 const path = require('path');
