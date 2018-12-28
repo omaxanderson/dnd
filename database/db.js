@@ -36,4 +36,4 @@ class db {
 	}
 }
 
-module.exports = db;
+module.exports = new db();
