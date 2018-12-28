@@ -6,7 +6,19 @@ if (process.argv.length < 3) {
 	throw new Error('Error: no filename supplied');
 }
 
-fs.writeFileSync(process.argv[2], 
+const d = new Date();
+const filename = `${d.getFullYear()}${d.getMonth() + 1}${d.getDate()}${d.getHours()}${d.getMinutes()}${d.getSeconds()}_${process.argv[2]}`;
+
+fs.readdir('.', (err, files) => {
+	files.forEach(f => {
+		console.log(f);
+		if (f == filename) {
+			throw new Error(`File ${filename} already exists!`);
+		}
+	});
+});
+
+fs.writeFileSync(filename,
 `const db = require('../database/db');
 const fs = require('fs');
 const path = require('path');
