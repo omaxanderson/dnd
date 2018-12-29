@@ -4,10 +4,15 @@ var router = express.Router();
 var Auth = require('../controllers/login');
 
 /* GET home page. */
-router.get('/', async function(req, res, next) {
-	const authorized = await Auth.authorize(req.query);
-	console.log(authorized);
-	res.send('login home');
+router.get('/', function(req, res, next) {
+	Auth.authorize(req.query)
+		.then(result => {
+			res.send(result);
+		})
+		.catch(err => {
+			res.status(400);
+			res.send(err);
+		});
 });
 
 /* POST authorize based on credentials passed */

@@ -17,6 +17,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// need to break up the routes into "authorized" and "unauthorized"
+// so that we can create some authorization middleware for the restricted routes
 app.use('/api', indexRouter);
 app.use('/api/user', usersRouter);
 app.use('/api/login', loginRouter);
