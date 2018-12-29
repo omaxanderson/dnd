@@ -6,6 +6,7 @@ import {
 } from 'react-router-dom';
 import Login from './auth/Login';
 import Logout from './auth/Logout';
+import Register from './auth/Register';
 import Home from './Home';
 const cookies = require('browser-cookies');
 
@@ -42,6 +43,16 @@ function App() {
 					render={props => {
 						return(
 							<Login
+								{...props}
+								auth={ Auth }
+							/>
+						)
+					}}
+				/>
+				<Route path='/register' 
+					render={props => {
+						return(
+							<Register
 								{...props}
 								auth={ Auth }
 							/>

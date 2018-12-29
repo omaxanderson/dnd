@@ -8,7 +8,6 @@ class Card extends React.Component {
 		this.DEFAULT_SIZE_M = 6;
 		this.DEFAULT_OFFSET_SM = 1;
 		this.DEFAULT_OFFSET_M = 3;
-
 	}
 
 	render() {
@@ -24,7 +23,7 @@ class Card extends React.Component {
 		} = this.props;
 
 		return (
-			<div className='row'>
+			<div className='row' style={{marginTop:'20px'}}>
 				<div className={ 
 					`col 
 					s${sSize || this.DEFAULT_SIZE_SM} 
