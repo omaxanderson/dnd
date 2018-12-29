@@ -3,6 +3,10 @@ const dbconfig = require('./dbconfig');
 
 class db {
 
+	format(sql, params) {
+		return mysql.format(sql, params);
+	}
+
 	query(sql) {
 		return new Promise((resolve, reject) => {
 			var connection = mysql.createConnection(dbconfig);
