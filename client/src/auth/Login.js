@@ -14,6 +14,7 @@ class Login extends React.Component {
 
 		this.usernameRef = React.createRef();
 		this.passwordRef = React.createRef();
+		this.submitRef = React.createRef();
 	}
 
 	render() {
@@ -32,8 +33,8 @@ class Login extends React.Component {
 			<Card
 				sSize={12}
 				sOffset={0}
-				mSize={6}
-				mOffset={3}
+				mSize={4}
+				mOffset={4}
 				cardTitle={'Login'}
 				cardBody={ this.getLoginForm() }
 			/>
@@ -57,13 +58,14 @@ class Login extends React.Component {
 		});
 	}
 
+	// Should this use InputFields?
 	getLoginForm() {
 		return (
 			<div className='row' style={{marginBotton: '0px'}}>
 				<form className='col s12'>
 					<div className='row' style={{marginBottom: '0px'}}>
 						<div className='input-field col s12'>
-							<input id='username' ref={this.usernameRef} type='text' className='validate'/>
+							<input id='username' autoFocus={true} ref={this.usernameRef} type='text' className='validate'/>
 							<label htmlFor='username'>Username</label>
 						</div>
 						<div className='input-field col s12'>
@@ -75,11 +77,12 @@ class Login extends React.Component {
 								type='submit'
 								name='action'
 								onClick={ (e) => this.login(e) }
+								style={{marginTop: '20px'}}
 							>Log In
 								<i className='material-icons right'>send</i>
 							</button>
 						</div>
-						<div className='col s12'>
+						<div className='col s12' style={{marginTop: this.state.error ? '20px' : '0px'}}>
 							<p className='red-text'>{this.state.error}</p>
 						</div>
 					</div>

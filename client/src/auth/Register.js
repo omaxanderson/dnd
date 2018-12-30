@@ -3,6 +3,14 @@ import InputField from '../components/InputField';
 import Card from '../components/Card';
 
 class Register extends React.Component {
+	constructor(props) {
+		super(props);
+
+		this.usernameRef = React.createRef();
+		this.emailRef = React.createRef();
+		this.passwordRef = React.createRef();
+		this.passwordConfRef = React.createRef();
+	}
 	render() {
 		return (
 			<Card
@@ -31,7 +39,7 @@ class Register extends React.Component {
 							id={'username'}
 							type={'text'}
 							className='validate'
-							autofocus='true'
+							autoFocus={true}
 						/>
 						<InputField
 							sSize={12}

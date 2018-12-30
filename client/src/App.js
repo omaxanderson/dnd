@@ -26,32 +26,20 @@ const Auth = {
 			mode: 'cors'
 		})
 			.then(response => {
-				console.log(response);
 				const resStatus = response.status;
 				if (resStatus === 200) {
 					this.isAuthenticated = true;
 					cookies.set('accessToken', 'abcdefg');
 					this.accessToken = cookies.get('accessToken');
-					next(JSON.stringify({
-						status: 200,
-						message: 'Authenticated'
-					}));
-				} else {
-					response.json() 
-						.then(err => {
-							next(JSON.stringify({
-								status: resStatus,
-								message: err.message
-							}));
-						});
 				}
+				response.json()
+					.then(data => {
+						next(JSON.stringify(data));
+					});
 			})
 			.catch(err => {
 				console.log(err);
-				next(JSON.stringify({
-					status: 500,
-					message: ''
-				}));
+				next(JSON.stringify(err));
 			});
 		/*
 		*/
