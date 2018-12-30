@@ -44,10 +44,7 @@ class Login extends React.Component {
 		console.log(this.usernameRef.current.value);
 		const username = this.usernameRef.current.value;
 		const password = this.passwordRef.current.value;
-		this.props.auth.authenticate({
-			username,
-			password
-		}, (result) => {
+		this.props.auth.authenticate({ username, password }, (result) => {
 			result = JSON.parse(result);
 			if (result.status === 200) {
 				this.setState({ redirectToReferrer: true });

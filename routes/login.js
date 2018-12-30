@@ -18,11 +18,18 @@ router.get('/', function(req, res, next) {
 
 /* POST authorize based on credentials passed */
 router.post('/', (req, res, next) => {
-	Auth.authorize(req.query)
+	console.log(req.body);
+	Auth.authorize(req.body)
 		.then(result => {
+			result = JSON.parse(result);
+			console.log(result);
+			if (!result.authorized) {
+				res.status(401);
+			}
 			res.send(result);
 		})
 		.catch(err => {
+			console.log('login unsuccessful');
 			res.status(400);
 			res.send(err);
 		});

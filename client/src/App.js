@@ -16,29 +16,38 @@ const Auth = {
 	isAuthenticated: false,
 	accessToken: cookies.get('accessToken'),
 	authenticate(credentials, next) {
-		console.log(JSON.stringify(credentials));
 		fetch('http://localhost:8080/login', {
 			method: 'POST',
 			body: JSON.stringify(credentials),
 			headers: {
-				'Content-Type': 'application/json'
-			}
+				'Content-Type': 'application/json',
+				'Origin': 'http://localhost:3000'
+			},
+			mode: 'cors'
 		})
 			.then(response => {
-				console.log('response!!');
-				console.log(response);
+				if (response.status === 200) {
+					this.isAuthenticated = true;
+					cookies.set('accessToken', 'abcdefg');
+					this.accessToken = cookies.get('accessToken');
+					next(JSON.stringify({
+						status: 200,
+						message: 'Authenticated'
+					}))
+				} else {
+					next(JSON.stringify({
+						status: 500,
+						message: 'Login failed'
+					}));
+				}
 			})
 			.catch(err => {
-				console.log(err);
+				next(JSON.stringify({
+					status: 500,
+					message: 'Login failed'
+				}));
 			});
 		/*
-		this.isAuthenticated = true;
-		cookies.set('accessToken', 'abcdefg');
-		this.accessToken = cookies.get('accessToken');
-		next(JSON.stringify({
-			status: 200,
-			message: 'Authenticated'
-		}));
 		*/
 	},
 	logout() {
