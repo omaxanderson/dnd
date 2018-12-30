@@ -3,6 +3,12 @@ var router = express.Router();
 // include the controllers here
 var Auth = require('../controllers/login');
 
+// response message format
+// {	
+// 	success: [true, false],
+// 	message: 'Your message here'
+// }
+
 // @TODO this needs to be a POST eventually
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -21,14 +27,11 @@ router.post('/', (req, res, next) => {
 	console.log(req.body);
 	Auth.authorize(req.body)
 		.then(result => {
-			result = JSON.parse(result);
-			console.log(result);
-			res.send(result);
+			res.send(JSON.stringify({success: true, message: result}));
 		})
 		.catch(err => {
-			console.log('login unsuccessful');
 			res.status(400);
-			res.send(err);
+			res.send(JSON.stringify({success: false, message: err}));
 		});
 });
 
