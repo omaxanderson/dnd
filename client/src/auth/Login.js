@@ -8,7 +8,8 @@ class Login extends React.Component {
 		super(props);
 
 		this.state = {
-			redirectToReferrer: false
+			redirectToReferrer: false,
+			error: ''
 		};
 
 		this.usernameRef = React.createRef();
@@ -46,8 +47,12 @@ class Login extends React.Component {
 		const password = this.passwordRef.current.value;
 		this.props.auth.authenticate({ username, password }, (result) => {
 			result = JSON.parse(result);
+			console.log(result);
 			if (result.status === 200) {
+				console.log('success!');
 				this.setState({ redirectToReferrer: true });
+			} else {
+				this.setState({ error: result.message});
 			}
 		});
 	}
@@ -73,6 +78,9 @@ class Login extends React.Component {
 							>Log In
 								<i className='material-icons right'>send</i>
 							</button>
+						</div>
+						<div className='col s12'>
+							<p className='red-text'>{this.state.error}</p>
 						</div>
 					</div>
 				</form>

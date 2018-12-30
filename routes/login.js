@@ -23,9 +23,6 @@ router.post('/', (req, res, next) => {
 		.then(result => {
 			result = JSON.parse(result);
 			console.log(result);
-			if (!result.authorized) {
-				res.status(401);
-			}
 			res.send(result);
 		})
 		.catch(err => {

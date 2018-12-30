@@ -26,25 +26,31 @@ const Auth = {
 			mode: 'cors'
 		})
 			.then(response => {
-				if (response.status === 200) {
+				console.log(response);
+				const resStatus = response.status;
+				if (resStatus === 200) {
 					this.isAuthenticated = true;
 					cookies.set('accessToken', 'abcdefg');
 					this.accessToken = cookies.get('accessToken');
 					next(JSON.stringify({
 						status: 200,
 						message: 'Authenticated'
-					}))
-				} else {
-					next(JSON.stringify({
-						status: 500,
-						message: 'Login failed'
 					}));
+				} else {
+					response.json() 
+						.then(err => {
+							next(JSON.stringify({
+								status: resStatus,
+								message: err.message
+							}));
+						});
 				}
 			})
 			.catch(err => {
+				console.log(err);
 				next(JSON.stringify({
 					status: 500,
-					message: 'Login failed'
+					message: ''
 				}));
 			});
 		/*

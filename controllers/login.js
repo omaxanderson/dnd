@@ -27,7 +27,9 @@ async function authorize(credentials) {
 		// if nobody by that username, reject the promise
 		if (!result.length) {
 			return new Promise((resolve, reject) => {
-				reject(`Error: username ${username} not found.`);
+				reject(JSON.stringify({
+					message: JSON.stringify({message: `Username ${username} not found.`})
+				}));
 			});
 		}
 
@@ -37,9 +39,11 @@ async function authorize(credentials) {
 
 		return new Promise((resolve, reject) => {
 			if (!username || !password) {
-				reject('Error: no username or password supplied!');
+				reject(JSON.stringify({message: 'Error: no username or password supplied!'}));
 			} 
-			resolve(JSON.stringify({ authorized: match}));
+			match ? resolve(JSON.stringify({ message: 'Success' })) 
+				: reject(JSON.stringify({
+					message: 'Incorrect password and username combination.'}));
 		});
 	} catch (e) {
 		return e;
