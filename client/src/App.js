@@ -15,7 +15,23 @@ const cookies = require('browser-cookies');
 const Auth = {
 	isAuthenticated: false,
 	accessToken: cookies.get('accessToken'),
-	authenticate(next) {
+	authenticate(credentials, next) {
+		console.log(JSON.stringify(credentials));
+		fetch('http://localhost:8080/login', {
+			method: 'POST',
+			body: JSON.stringify(credentials),
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		})
+			.then(response => {
+				console.log('response!!');
+				console.log(response);
+			})
+			.catch(err => {
+				console.log(err);
+			});
+		/*
 		this.isAuthenticated = true;
 		cookies.set('accessToken', 'abcdefg');
 		this.accessToken = cookies.get('accessToken');
@@ -23,6 +39,7 @@ const Auth = {
 			status: 200,
 			message: 'Authenticated'
 		}));
+		*/
 	},
 	logout() {
 		return new Promise((resolve, reject) => {

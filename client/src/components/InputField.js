@@ -13,7 +13,7 @@ class InputField extends React.Component {
 		} = this.props;
 		return (
 			<div className={`input-field col s${sSize} m${mSize}`}>
-				<input id={id} type={type} className={className} autofocus={autofocus} />
+				<input id={id} type={type} className={className} autoFocus={{autofocus}} />
 				<label htmlFor={id}>{
 					label ? label : `${id.charAt(0).toUpperCase() + id.slice(1)}`}
 				</label>

@@ -10,6 +10,9 @@ class Login extends React.Component {
 		this.state = {
 			redirectToReferrer: false
 		};
+
+		this.usernameRef = React.createRef();
+		this.passwordRef = React.createRef();
 	}
 
 	render() {
@@ -38,7 +41,13 @@ class Login extends React.Component {
 
 	login(e) {
 		e.preventDefault();
-		this.props.auth.authenticate((result) => {
+		console.log(this.usernameRef.current.value);
+		const username = this.usernameRef.current.value;
+		const password = this.passwordRef.current.value;
+		this.props.auth.authenticate({
+			username,
+			password
+		}, (result) => {
 			result = JSON.parse(result);
 			if (result.status === 200) {
 				this.setState({ redirectToReferrer: true });
@@ -52,11 +61,11 @@ class Login extends React.Component {
 				<form className='col s12'>
 					<div className='row'>
 						<div className='input-field col s12'>
-							<input id='username' type='text' className='validate'/>
+							<input id='username' ref={this.usernameRef} type='text' className='validate'/>
 							<label htmlFor='username'>Username</label>
 						</div>
 						<div className='input-field col s12'>
-							<input id='password' type='password' className='validate'/>
+							<input id='password' ref={this.passwordRef} type='password' className='validate'/>
 							<label htmlFor='password'>Password</label>
 						</div>
 						<div className='col s12'>
