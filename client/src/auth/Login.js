@@ -59,9 +59,9 @@ class Login extends React.Component {
 
 	getLoginForm() {
 		return (
-			<div className='row'>
+			<div className='row' style={{marginBotton: '0px'}}>
 				<form className='col s12'>
-					<div className='row'>
+					<div className='row' style={{marginBottom: '0px'}}>
 						<div className='input-field col s12'>
 							<input id='username' ref={this.usernameRef} type='text' className='validate'/>
 							<label htmlFor='username'>Username</label>
