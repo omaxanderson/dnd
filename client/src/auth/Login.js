@@ -43,7 +43,6 @@ class Login extends React.Component {
 
 	login(e) {
 		e.preventDefault();
-		console.log(this.usernameRef.current.value);
 		const username = this.usernameRef.current.value;
 		const password = this.passwordRef.current.value;
 		this.props.auth.authenticate({ username, password }, (result) => {
