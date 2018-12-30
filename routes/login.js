@@ -26,10 +26,16 @@ router.get('/', function(req, res, next) {
 router.post('/', (req, res, next) => {
 	console.log(req.body);
 	Auth.authorize(req.body)
-		.then(result => {
-			res.send(JSON.stringify({success: true, message: result}));
+		.then(data => {
+			data = JSON.parse(data);
+			res.send(JSON.stringify({
+				success: true,
+				message: data.message,
+				token: data.token
+			}));
 		})
 		.catch(err => {
+			console.log('error?!?!?!');
 			res.status(400);
 			res.send(JSON.stringify({success: false, message: err}));
 		});

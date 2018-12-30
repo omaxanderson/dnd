@@ -4,6 +4,20 @@ const bcrypt = require('bcrypt');
 const uuid = require('uuid/v1');
 const SALT_ROUNDS = 8;
 
+async function generateAccessToken(userId) {
+	const token = uuid();
+	const insertSql = db.format(`REPLACE INTO access_token (token, user_id) 
+		VALUES (?, ?)`, [token, userId]);
+	const insertResult = await db.query(insertSql);
+	if (!insertResult.affectedRows) {
+		throw new Error('Something bad happened on insert');
+	} else {
+		return new Promise((resolve, reject) => {
+			resolve(token);
+		});
+	}
+}
+
 async function authorize(credentials) {
 	console.log(credentials);
 	const { username, password } = credentials;
@@ -35,15 +49,10 @@ async function authorize(credentials) {
 		const match = await bcrypt.compare(password, result[0].password);
 
 		// if there was a match, we need to generate an access token and store it
-		console.log(match);
+		let token = '';
 		if (match) {
-			console.log('creating accesstoken');
-			const token = uuid();
-			const insertSql = db.format(`INSERT INTO access_token (token, user_id) 
-				VALUES (?, ?)`, [token, result[0].user_id]);
-			console.log(insertSql);
-			const insertResult = await db.query(insertSql);
-			console.log('res: ' + insertResult);
+			token = await generateAccessToken(result[0].user_id);
+			console.log(token);
 		}
 
 		console.log(match ? 'Match!' : 'No match :(');
@@ -52,7 +61,7 @@ async function authorize(credentials) {
 			if (!username || !password) {
 				reject('No username or password supplied!');
 			} 
-			match ? resolve('Success') 
+			match ? resolve(JSON.stringify({token: token, message: 'Success'})) 
 				: reject('Incorrect password and username combination.');
 		});
 	} catch (e) {

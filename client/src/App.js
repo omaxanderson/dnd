@@ -29,11 +29,11 @@ const Auth = {
 				const resStatus = response.status;
 				if (resStatus === 200) {
 					this.isAuthenticated = true;
-					cookies.set('accessToken', 'abcdefg');
-					this.accessToken = cookies.get('accessToken');
 				}
 				response.json()
 					.then(data => {
+						cookies.set('accessToken', data.token);
+						this.accessToken = cookies.get('accessToken');
 						next(JSON.stringify(data));
 					});
 			})
