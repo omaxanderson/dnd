@@ -2,6 +2,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var http = require('http');
+var bodyParser = require('body-parser');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -11,12 +12,22 @@ var registerRouter = require('./routes/register');
 
 var app = express();
 
-// view engine setup
+const jsonParser = bodyParser.json();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use((req, res, next) => {
+	res.append('Access-Control-Allow-Origin', 'http://localhost:3000');
+	res.append('Access-Control-Allow-Headers', 'Content-Type');
+	if (req.method === 'OPTIONS') {
+		res.send();
+	} else {
+		next();
+	}
+});
 
 // need to break up the routes into "authorized" and "unauthorized"
 // so that we can create some authorization middleware for the restricted routes
@@ -24,10 +35,6 @@ app.use('/api', indexRouter);
 app.use('/api/user', usersRouter);
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
-
-app.get('/', (req, res) => {
-	res.send('sup lauren');
-});
 
 /**
  * Get port from environment and store in Express.
