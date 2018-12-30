@@ -15,7 +15,8 @@ function up() {
 		token VARCHAR(50),
 		user_id INT,
 		PRIMARY KEY (token, user_id),
-		INDEX token_index (token)
+		INDEX token_index (token),
+		UNIQUE INDEX user_id (user_id)
 	)`;
 
 	db.query(sql)
