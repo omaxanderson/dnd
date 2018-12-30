@@ -7,6 +7,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 // Login Router
 var loginRouter = require('./routes/login');
+var registerRouter = require('./routes/register');
 
 var app = express();
 
@@ -21,7 +22,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 // so that we can create some authorization middleware for the restricted routes
 app.use('/api', indexRouter);
 app.use('/api/user', usersRouter);
-app.use('/api/login', loginRouter);
+app.use('/login', loginRouter);
+app.use('/register', registerRouter);
 
 app.get('/', (req, res) => {
 	res.send('sup lauren');
