@@ -26,13 +26,13 @@ const Auth = {
 		})
 			.then(response => {
 				const resStatus = response.status;
-				if (resStatus === 200) {
-					this.isAuthenticated = true;
-				}
 				response.json()
 					.then(data => {
-						cookies.set('accessToken', data.token);
-						this.accessToken = cookies.get('accessToken');
+						if (resStatus === 200) {
+							this.isAuthenticated = true;
+							cookies.set('accessToken', data.token);
+							this.accessToken = cookies.get('accessToken');
+						}
 						next(JSON.stringify(data));
 					});
 			})

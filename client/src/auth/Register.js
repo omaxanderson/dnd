@@ -9,7 +9,8 @@ class Register extends React.Component {
 		super(props);
 
 		this.state = {
-			redirectToHome: false
+			redirectToHome: false,
+			errorMessage: ''
 		};
 
 		this.usernameRef = React.createRef();
@@ -66,11 +67,12 @@ class Register extends React.Component {
 					cookies.set('accessToken', data.token);
 					this.props.auth.accessToken = data.token;
 					this.setState({ redirectToHome: true });
+				} else {
+					this.setState({ errorMessage: data.message });
 				}
-				console.log(data);
 			})
 			.catch(err => {
-				console.log(err);
+				this.setState({ errorMessage: err.message });
 			});
 
 	}
@@ -79,7 +81,7 @@ class Register extends React.Component {
 		return (
 			<div className='row'>
 				<form className='col s12'>
-					<div className='row'>
+					<div className='row' style={{marginBottom: '0px'}} >
 						<InputField
 							sSize={12}
 							id={'username'}
@@ -118,6 +120,9 @@ class Register extends React.Component {
 							>Submit
 								<i className='material-icons right'>send</i>
 							</button>
+						</div>
+						<div className='col s12' style={{marginTop: this.state.errorMessage ? '20px' : '0px'}}>
+							<p className='red-text'>{this.state.errorMessage}</p>
 						</div>
 					</div>
 				</form>
