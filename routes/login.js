@@ -28,6 +28,8 @@ router.post('/', (req, res, next) => {
 	Auth.authorize(req.body)
 		.then(data => {
 			data = JSON.parse(data);
+			// create a session
+			req.session.accessToken = data.token;
 			res.send(JSON.stringify({
 				success: true,
 				message: data.message,

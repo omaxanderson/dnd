@@ -3,10 +3,14 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var http = require('http');
 var bodyParser = require('body-parser');
+const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session);
+const options = require('./database/sessionDbConfig.js');
+const sessionStore = new MySQLStore(options);
 
+// Routers
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-// Login Router
 var loginRouter = require('./routes/login');
 var registerRouter = require('./routes/register');
 
@@ -19,7 +23,27 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use((req, res, next) => {
+// use the session middleware
+app.use(session({
+	secret: 'max is cool',
+	resave: false,
+//	saveUninitialized: true,
+	store: sessionStore
+}));
+
+const apiMiddleware = (req, res, next) => {
+	console.log(req.session);
+	req.session.test = 'hello world!';
+	console.log(req.cookies);
+	if (!req.cookies.accessToken) {
+		res.send('unauthorized');
+	} else {
+		// check that the session cookie is valid
+		next();
+	}
+};
+
+const loginRegisterMiddleware = (req, res, next) => {
 	res.append('Access-Control-Allow-Origin', 'http://localhost:3000');
 	res.append('Access-Control-Allow-Headers', 'Content-Type');
 	if (req.method === 'OPTIONS') {
@@ -27,14 +51,14 @@ app.use((req, res, next) => {
 	} else {
 		next();
 	}
-});
+};
 
 // need to break up the routes into "authorized" and "unauthorized"
 // so that we can create some authorization middleware for the restricted routes
-app.use('/api', indexRouter);
-app.use('/api/user', usersRouter);
-app.use('/login', loginRouter);
-app.use('/register', registerRouter);
+app.use('/api', apiMiddleware, indexRouter);
+app.use('/api/user', apiMiddleware, usersRouter);
+app.use('/login', loginRegisterMiddleware, loginRouter);
+app.use('/register', loginRegisterMiddleware, registerRouter);
 
 /**
  * Get port from environment and store in Express.
