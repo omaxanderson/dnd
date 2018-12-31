@@ -1,4 +1,5 @@
 const db = require('../database/db');
+const Auth = require('./login');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
 // @TODO this number is shared across files so I think this should be an env variable
@@ -82,11 +83,18 @@ async function register(params) {
 	// register the user
 	if (valid) {
 		await insertUser(username, password, email);
-	}
 
-	return new Promise((resolve, reject) => {
-		valid ? resolve(message) : reject(message);
-	});
+		// here we should also perform the login process
+		const authorized = await Auth.authorize({username, password});
+		return new Promise((resolve, reject) => {
+			resolve(authorized);
+		})
+	} else {
+		console.log('rejecting register');
+		return new Promise((resolve, reject) => {
+			reject(message);
+		});
+	}
 }
 
 module.exports = {
