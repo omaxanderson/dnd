@@ -52,7 +52,6 @@ async function authorize(credentials) {
 		let token = '';
 		if (match) {
 			token = await generateAccessToken(result[0].user_id);
-			console.log(token);
 		}
 
 		console.log(match ? 'Match!' : 'No match :(');
