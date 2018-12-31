@@ -13,7 +13,6 @@ const cookies = require('browser-cookies');
 
 // set up our authentication state
 const Auth = {
-	isAuthenticated: false,
 	accessToken: cookies.get('accessToken'),
 	authenticate(credentials, next) {
 		fetch('http://localhost:8080/login', {
@@ -78,6 +77,7 @@ function App() {
 							/>
 						)
 					}}
+					auth={ Auth }
 				/>
 				<Route path='/logout' 
 					render={props => {
@@ -96,6 +96,7 @@ function App() {
 
 function PrivateRoute({ component: Component, ...rest }) {
 	console.log(Auth);
+	console.log(Auth.accessToken);
 	return (
 		<Route
 			{...rest}

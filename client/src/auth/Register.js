@@ -8,16 +8,14 @@ class Register extends React.Component {
 	constructor(props) {
 		super(props);
 
+		this.state = {
+			redirectToHome: false
+		};
+
 		this.usernameRef = React.createRef();
 		this.emailRef = React.createRef();
 		this.passwordRef = React.createRef();
 		this.passwordConfRef = React.createRef();
-	}
-
-	componentDidMount() {
-		// focus on the usernameref
-		console.log(this.usernameRef.current);
-		this.usernameRef.current.focus();
 	}
 
 	render() {
@@ -43,7 +41,6 @@ class Register extends React.Component {
 
 	signUp(e) {
 		e.preventDefault();
-		console.log(this.usernameRef.current);
 		const username = this.usernameRef.current.value;
 		const email = this.emailRef.current.value;
 		const password = this.passwordRef.current.value;
@@ -62,7 +59,15 @@ class Register extends React.Component {
 			}
 		})
 			.then(response => {
-				console.log(response);
+				return response.json();
+			})
+			.then(data => {
+				if (data.token) {
+					cookies.set('accessToken', data.token);
+					this.props.auth.accessToken = data.token;
+					this.setState({ redirectToHome: true });
+				}
+				console.log(data);
 			})
 			.catch(err => {
 				console.log(err);
