@@ -15,12 +15,11 @@ const cookies = require('browser-cookies');
 const Auth = {
 	accessToken: cookies.get('accessToken'),
 	authenticate(credentials, next) {
-		fetch('http://localhost:8080/login', {
+		fetch('/login', {
 			method: 'POST',
 			body: JSON.stringify(credentials),
 			headers: {
-				'Content-Type': 'application/json',
-				'Origin': 'http://localhost:3000'
+				'Content-Type': 'application/json'
 			},
 			mode: 'cors'
 		})

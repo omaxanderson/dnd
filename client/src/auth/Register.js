@@ -46,7 +46,7 @@ class Register extends React.Component {
 		const email = this.emailRef.current.value;
 		const password = this.passwordRef.current.value;
 		const passwordConf = this.passwordConfRef.current.value;
-		fetch('http://localhost:8080/register', {
+		fetch('/register', {
 			method: 'POST',
 			body: JSON.stringify({
 				username,
@@ -55,6 +55,7 @@ class Register extends React.Component {
 				passwordConf
 			}),
 			mode: 'cors',
+			credentials: 'same-origin',
 			headers: {
 				'Content-Type': 'application/json'
 			}

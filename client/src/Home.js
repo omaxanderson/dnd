@@ -19,7 +19,7 @@ class Home extends React.Component {
 				name: 'max',
 				dog: 'mongo'
 			}),
-			credentials: 'include',
+			credentials: 'same-origin',
 			mode: 'cors'
 		})
 		.then(response => {
