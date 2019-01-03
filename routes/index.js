@@ -6,4 +6,9 @@ router.get('/', function(req, res, next) {
   res.send('api home');
 });
 
+/* POST home page. */
+router.post('/', function(req, res, next) {
+  res.send('api home');
+});
+
 module.exports = router;

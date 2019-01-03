@@ -25,22 +25,44 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // use the session middleware
 app.use(session({
+	key: 'myKey',
 	secret: 'max is cool',
-	resave: false,
-//	saveUninitialized: true,
-	store: sessionStore
+	resave: true,
+	saveUninitialized: true,
+	cookie: {
+		secure: false,
+		maxAge: 1000 * 60 * 60 * 24 * 7 * 2 	// 2 weeks 
+	}
+	//store: sessionStore
 }));
 
 const apiMiddleware = (req, res, next) => {
 	console.log(req.session);
-	req.session.test = 'hello world!';
 	console.log(req.cookies);
+
+	res.append('Access-Control-Allow-Origin', 'http://localhost:3000');
+	res.append('Access-Control-Allow-Headers', 'Content-Type');
+	if (req.method === 'OPTIONS') {
+		console.log('options request');
+		res.send();
+	} else {
+		console.log('post request');
+		next();
+	}
+
+	/*
+	if (!req.session.views) {
+		req.session.views = 1;
+	} else {
+		req.session.views++;
+	}
 	if (!req.cookies.accessToken) {
 		res.send('unauthorized');
 	} else {
 		// check that the session cookie is valid
 		next();
 	}
+	*/
 };
 
 const loginRegisterMiddleware = (req, res, next) => {

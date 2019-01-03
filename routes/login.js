@@ -29,7 +29,11 @@ router.post('/', (req, res, next) => {
 		.then(data => {
 			data = JSON.parse(data);
 			// create a session
+			console.log('adding accessToken to session');
+			console.log(req.session);
 			req.session.accessToken = data.token;
+			console.log(req.session);
+
 			res.send(JSON.stringify({
 				success: true,
 				message: data.message,

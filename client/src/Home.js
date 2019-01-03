@@ -9,7 +9,7 @@ class Home extends React.Component {
 
 	test(e) {
 		e.preventDefault();
-		fetch('http://localhost:8080/api', {
+		fetch('/api', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -19,6 +19,7 @@ class Home extends React.Component {
 				name: 'max',
 				dog: 'mongo'
 			}),
+			credentials: 'include',
 			mode: 'cors'
 		})
 		.then(response => {
