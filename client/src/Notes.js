@@ -1,5 +1,6 @@
 import React from 'react';
 import Navbar from './components/Navbar';
+import Editor from './components/Editor';
 
 class Notes extends React.Component {
 
@@ -8,6 +9,8 @@ class Notes extends React.Component {
 			<React.Fragment>
 			<Navbar />
 			<div className='container'>
+				<Editor
+				/>
 				<h4>
 					Ideas
 				</h4>
