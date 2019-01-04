@@ -8,6 +8,7 @@ import Login from './auth/Login';
 import Logout from './auth/Logout';
 import Register from './auth/Register';
 import Home from './Home';
+import Notes from './Notes';
 const cookies = require('browser-cookies');
 
 
@@ -57,6 +58,7 @@ function App() {
 		<Router>
 			<div>
 				<PrivateRoute exact path='/' component={ Home } />
+				<PrivateRoute path='/notes' component={ Notes } />
 				<Route path='/login' 
 					render={props => {
 						return(
