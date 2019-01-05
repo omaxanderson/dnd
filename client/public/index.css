@@ -7,3 +7,68 @@ nav {
 	padding-right: 20px;
 	padding-left: 20px;
 }
+
+.note-editor {
+	outline: none !important;
+	height: 100%;
+	border: 1px solid #BBBBBB;
+}
+
+.text-box {
+	height: calc(100vh - 107px);
+	border: 1px solid black;
+	outline: none !important;
+}
+
+.text-box > ul {
+	display: block;
+	list-style-type: disc !important;
+	margin-top: 1em;
+	margin-bottom: 1em;
+	margin-left: 0;
+	margin-right: 0;
+	padding-left: 40px;
+}
+
+.text-box > ul > li {
+	display: list-item;
+	list-style-type: disc !important;
+}
+
+.off {
+	background-color: #AAAAAA;
+	color: black;
+}
+
+.on {
+	background-color: #444444;
+	color: white;
+}
+
+.editor-button {
+	padding: 7px 12px 7px 12px;
+	border-radius: 5px;
+	margin: 5px 5px 5px 0px;
+}
+
+.editor-button:active {
+	background-color: #444444;
+}
+
+.editor-button > i {
+	font-size: 20px;
+}
+
+.editor-button-bold {
+	font-weight: bold;
+}
+
+.editor-button-italic {
+	font-style: italic;
+}
+
+.editor-button-underline {
+	text-decoration: underline;
+}
+
+.

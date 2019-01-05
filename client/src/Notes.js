@@ -10,6 +10,7 @@ class Notes extends React.Component {
 			<Navbar />
 			<div className='container'>
 				<Editor
+
 				/>
 				<h4>
 					Ideas
