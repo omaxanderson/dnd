@@ -16,22 +16,24 @@ class ButtonBar extends React.Component {
 	}
 
 	render() {
+		console.log('rendering ButtonBar');
 		const toggleableButtons = [
 			'bold',
 			'italic',
 			'underline',
+			'strikeThrough',
 		]
-		.map(methodName => {
-			let displayName = methodName.slice(0, 1).toUpperCase() + methodName.slice(1);
-			return (
-				<button 
-					className={`editor-button editor-button-${methodName} ${this.state[`${methodName}Status`] ? 'on' : 'off'}`} 
+			.map(methodName => {
+				let displayName = methodName.slice(0, 1).toUpperCase() + methodName.slice(1);
+				return (
+					<button 
+					className={`editor-button editor-button-${methodName} ${document.queryCommandState(methodName) ? 'on' : 'off'}`} 
 					data-value={methodName}
 					key={methodName}
 					onClick={this.handleToggleClick}>{displayName}
-				</button>
-			)
-		});
+					</button>
+				)
+			});
 
 		const otherButtons = [
 			{methodName: 'insertOrderedList', displayName: 'OL', icon: 'format_list_numbered'},
@@ -39,28 +41,34 @@ class ButtonBar extends React.Component {
 			{methodName: 'justifyLeft', displayName: 'Justify Left', icon: 'format_align_left'},
 			{methodName: 'justifyRight', displayName: 'Justify Right', icon: 'format_align_right'},
 			{methodName: 'justifyCenter', displayName: 'Justify Center', icon: 'format_align_center'},
+			{methodName: 'indent', displayName: 'Indent', icon: 'format_align_center'},
+			{methodName: 'outdent', displayName: 'Outdent', icon: 'format_align_center'},
+			{methodName: 'createLink', displayName: 'Create Link', icon: 'format_align_center'},
+			{methodName: 'insertHorizontalRule', displayName: 'Line Break', icon: 'format_align_center'},
 		]
-		.map(obj => {
-			return (
-				<button 
-					className={'editor-button off'} 
-					data-value={obj.methodName}
-					key={obj.methodName}
-					onClick={this.handleClick}>{obj.displayName}
-				</button>
-			)
-		});
+			.map(obj => {
+				return (
+					<button 
+						className={'editor-button off'} 
+						data-value={obj.methodName}
+						key={obj.methodName}
+						onClick={this.handleClick}>{obj.displayName}
+					</button>
+				)
+			});
 
 		return (
-			<div className='button-bar'>
-				{toggleableButtons}
-				{otherButtons}
-				<div className='input-field'>
-					<select>
+			<div className='button-bar row'>
+				<div className='col s8'>
+					{toggleableButtons}
+					{otherButtons}
+				</div>
+				<div className='input-field col s2 editor-select-container'>
+					<select defaultValue='3' onChange={this.handleSelect} className='browser-default editor-select'>
 						<option value='1'>Tiny</option>
 						<option value='2'>Small</option>
-						<option value='3'>Kinda Small</option>
-						<option value='4' selected>Normal</option>
+	 					<option value='3'>Normal</option>
+						<option value='4'>A Bit Bigger</option>
 						<option value='5'>Large</option>
 						<option value='6'>Really Big</option>
 						<option value='7'>Maximum Size</option>
@@ -68,6 +76,11 @@ class ButtonBar extends React.Component {
 				</div>
 			</div>
 		);
+	}
+
+	handleSelect = (e) => {
+		e.preventDefault();
+		this.props.execCommand('fontSize', false, e.target.value);
 	}
 
 	handleClick = (e) => {

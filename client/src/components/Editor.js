@@ -5,30 +5,42 @@ class Editor extends React.Component {
 	constructor(props) {
 		super(props);
 
+		this.state = {
+			boldStatus: false,
+			italicStatus: false,
+			underlineStatus: false,
+			textContent: '',
+			lastSaveTimestamp: new Date(),
+		}
+
 		this.textEditorRef = React.createRef();
 	}
 
 	componentDidMount() {
-		console.log('setting focus');
 		this.textEditorRef.current.focus();
 
-		console.log('justifying...');
 		const justifyLeft = document.execCommand('justifyLeft');
+
+		// set interval to update our state every 5 seconds
+		window.setInterval(() => {
+			const newTextContent = this.textEditorRef.current.innerHTML;
+			this.setState({textContent: newTextContent});
+		}, 5000);
 	}
 
 	render() {
 		return (
 			<div className='editor'>
-			<ButtonBar 
-			execCommand={this.executeCommand}
-			/>
-			<div ref={this.textEditorRef} contentEditable onKeyDown={this.handleButtonDown} className='text-box'></div>
+				<ButtonBar 
+					execCommand={this.executeCommand}
+				/>
+				<div ref={this.textEditorRef} contentEditable onKeyDown={this.handleButtonDown} className='text-box'></div>
 			</div>
 		);
 	}
 
 	handleButtonDown = (key, ...rest) => {
-		console.log(key.which);
+		// console.log(key.which);
 		//console.log(`${key.metaKey ? 'Cmd + ' : ''} ${key.key}`);
 
 		// Tab
@@ -91,9 +103,10 @@ class Editor extends React.Component {
 		}
 	}
 
-	executeCommand = cmd => {
+	executeCommand = (...params) => {
 		this.refocus();
-		document.execCommand(cmd);
+		console.log(...params);
+		document.execCommand(...params);
 		this.refocus();
 	}
 
