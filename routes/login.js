@@ -32,6 +32,7 @@ router.post('/', (req, res, next) => {
 			console.log('adding accessToken to session');
 			console.log(req.session);
 			req.session.accessToken = data.token;
+			req.session.userId = data.userId;
 			console.log(req.session);
 
 			res.send(JSON.stringify({

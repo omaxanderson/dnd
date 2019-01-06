@@ -60,8 +60,11 @@ async function authorize(credentials) {
 			if (!username || !password) {
 				reject('No username or password supplied!');
 			} 
-			match ? resolve(JSON.stringify({token: token, message: 'Success'})) 
-				: reject('Incorrect password and username combination.');
+			match ? resolve(JSON.stringify({
+				userId: result[0].user_id, 
+				token: token, 
+				message: 'Success'
+			})) : reject('Incorrect password and username combination.');
 		});
 	} catch (e) {
 		console.log(e);
