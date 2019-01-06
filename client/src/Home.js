@@ -31,7 +31,7 @@ class Home extends React.Component {
 
 	test(e) {
 		e.preventDefault();
-		fetch('/logout', {
+		fetch('/api/notes', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
