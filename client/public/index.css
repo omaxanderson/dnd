@@ -71,4 +71,10 @@ nav {
 	text-decoration: underline;
 }
 
-.
+.editor-select {
+	height: 2.25rem; /* this is kind of hacky and I don't like that it's hard coded */
+}
+
+.editor-select-container {
+	margin-top: 5px; /* this is also hard coded to equal the margin from the other buttons */
+}
