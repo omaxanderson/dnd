@@ -3,3 +3,6 @@
 2018123013553_create_access_token_table.js UP has run successfully on 2018-12-30 14:12:46
 2018123013553_create_access_token_table.js DOWN has run successfully on 2018-12-30 14:13:30
 2018123013553_create_access_token_table.js UP has run successfully on 2018-12-30 14:13:32
+201916114129_create_note_table.js UP has run successfully on 2019-1-6 11:58:53
+201916114141_create_note_tag_table.js UP has run successfully on 2019-1-6 11:59:01
+201916115358_create_tag_table.js UP has run successfully on 2019-1-6 11:59:07
