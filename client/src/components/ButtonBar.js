@@ -50,10 +50,22 @@ class ButtonBar extends React.Component {
 				</button>
 			)
 		});
+
 		return (
 			<div className='button-bar'>
 				{toggleableButtons}
 				{otherButtons}
+				<div className='input-field'>
+					<select>
+						<option value='1'>Tiny</option>
+						<option value='2'>Small</option>
+						<option value='3'>Kinda Small</option>
+						<option value='4' selected>Normal</option>
+						<option value='5'>Large</option>
+						<option value='6'>Really Big</option>
+						<option value='7'>Maximum Size</option>
+					</select>
+				</div>
 			</div>
 		);
 	}

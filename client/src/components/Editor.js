@@ -28,17 +28,32 @@ class Editor extends React.Component {
 	}
 
 	handleButtonDown = (key, ...rest) => {
-		console.log(`${key.metaKey ? 'Cmd + ' : ''} ${key.key}`);
-		// Handle the tab key press
+		console.log(key.which);
+		//console.log(`${key.metaKey ? 'Cmd + ' : ''} ${key.key}`);
+
+		// Tab
 		if (key.which === 9) {
 			key.preventDefault();
-			this.executeCommand('indent');
-			console.log('stop this behavior and execute the indent command');
+			if (key.shiftKey) {
+				this.executeCommand('outdent');
+			} else {
+				this.insertTextAtCursor('&nbsp;&nbsp;&nbsp;&nbsp;');
+			}
 		}
 
-		if (key.keyCode === 1) {
-
+		// Cmd + u
+		if (key.which === 85 && key.metaKey) {
+			key.preventDefault();
+			this.executeCommand('undo');
 		}
+
+		// Cmd + u
+		if (key.which === 89 && key.metaKey) {
+			key.preventDefault();
+			this.executeCommand('redo');
+		}
+
+		// Later we can start adding something like on '&' then we fetch a list of NPC's or similar
 	}
 
 	// taken from https://jsfiddle.net/Xeoncross/4tUDk/
