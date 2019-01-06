@@ -13,6 +13,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var loginRouter = require('./routes/login');
 var registerRouter = require('./routes/register');
+var logoutRouter = require('./routes/logout');
 
 var app = express();
 
@@ -25,20 +26,22 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // use the session middleware
 app.use(session({
-	key: 'myKey',
 	secret: 'max is cool',
 	resave: true,
 	saveUninitialized: true,
 	cookie: {
 		secure: false,
 		maxAge: 1000 * 60 * 60 * 24 * 7 * 2 	// 2 weeks 
-	}
-	//store: sessionStore
+	},
+	store: sessionStore
 }));
 
 const apiMiddleware = (req, res, next) => {
 	console.log(req.session);
 	console.log(req.cookies);
+
+	// check cookies
+
 
 	res.append('Access-Control-Allow-Origin', 'http://localhost:3000');
 	res.append('Access-Control-Allow-Headers', 'Content-Type');
@@ -80,6 +83,7 @@ const loginRegisterMiddleware = (req, res, next) => {
 app.use('/api', apiMiddleware, indexRouter);
 app.use('/api/user', apiMiddleware, usersRouter);
 app.use('/login', loginRegisterMiddleware, loginRouter);
+app.use('/logout', logoutRouter);
 app.use('/register', loginRegisterMiddleware, registerRouter);
 
 /**
