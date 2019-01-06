@@ -14,6 +14,7 @@ var usersRouter = require('./routes/users');
 var loginRouter = require('./routes/login');
 var registerRouter = require('./routes/register');
 var logoutRouter = require('./routes/logout');
+var noteRouter = require('./routes/note');
 
 var app = express();
 
@@ -82,6 +83,7 @@ const loginRegisterMiddleware = (req, res, next) => {
 // so that we can create some authorization middleware for the restricted routes
 app.use('/api', apiMiddleware, indexRouter);
 app.use('/api/user', apiMiddleware, usersRouter);
+app.use('/api/note', apiMiddleware, noteRouter);
 app.use('/login', loginRegisterMiddleware, loginRouter);
 app.use('/logout', logoutRouter);
 app.use('/register', loginRegisterMiddleware, registerRouter);
