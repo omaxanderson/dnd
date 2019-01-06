@@ -16,8 +16,9 @@ nav {
 
 .text-box {
 	height: calc(100vh - 107px);
-	border: 1px solid black;
+	border: 1px solid #BBBBBB;
 	outline: none !important;
+	padding: 15px;
 }
 
 .text-box > ul {
@@ -69,6 +70,10 @@ nav {
 
 .editor-button-underline {
 	text-decoration: underline;
+}
+
+.editor-button-strikeThrough {
+	text-decoration: line-through;
 }
 
 .editor-select {

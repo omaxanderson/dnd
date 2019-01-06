@@ -19,13 +19,15 @@ class Editor extends React.Component {
 	componentDidMount() {
 		this.textEditorRef.current.focus();
 
-		const justifyLeft = document.execCommand('justifyLeft');
+		document.execCommand('justifyLeft');
 
 		// set interval to update our state every 5 seconds
+		/*
 		window.setInterval(() => {
 			const newTextContent = this.textEditorRef.current.innerHTML;
 			this.setState({textContent: newTextContent});
 		}, 5000);
+		*/
 	}
 
 	render() {
@@ -104,21 +106,15 @@ class Editor extends React.Component {
 	}
 
 	executeCommand = (...params) => {
-		this.refocus();
 		console.log(...params);
+		this.refocus();
 		document.execCommand(...params);
 		this.refocus();
+		this.forceUpdate();
 	}
 
 	refocus() {
 		this.textEditorRef.current.focus();
-	}
-
-	handleBoldClick = (e) => {
-		e.preventDefault();
-		console.log('test');
-		document.execCommand('bold');
-		this.refocus();
 	}
 
 }
