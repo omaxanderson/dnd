@@ -31,7 +31,7 @@ class Home extends React.Component {
 
 	test(e) {
 		e.preventDefault();
-		fetch('/api/notes/3', {
+		fetch('/api/notes/1', {
 			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json'

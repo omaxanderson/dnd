@@ -10,7 +10,8 @@ async function getNoteOwner(noteId) {
 async function index(userId) {
 	const sql = `SELECT *
 		FROM note
-		WHERE user_id = ${userId}`;
+		WHERE user_id = ${userId}
+		AND active = 1`;
 	console.log(sql);
 
 	const notes = await db.query(sql);
@@ -76,7 +77,8 @@ async function remove(userId, noteId) {
 			error: `This note doesn't belong to you!`,
 		});
 	}
-	const sql = db.format(`DELETE FROM note
+	const sql = db.format(`UPDATE note
+		SET active = 0
 		WHERE note_id = ?
 		AND user_id = ?`, [noteId, userId]);
 	const result = await db.query(sql);
