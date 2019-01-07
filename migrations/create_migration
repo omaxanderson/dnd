@@ -8,6 +8,7 @@ if (process.argv.length < 3) {
 
 const d = new Date();
 const filename = `${d.getFullYear()}${d.getMonth() + 1}${d.getDate()}${d.getHours()}${d.getMinutes()}${d.getSeconds()}_${process.argv[2]}`;
+console.log(`${filename}.js`);
 
 fs.readdir('.', (err, files) => {
 	files.forEach(f => {
