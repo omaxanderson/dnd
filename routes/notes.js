@@ -23,4 +23,12 @@ router.put('/:noteId', async (req, res, next) => {
 	res.send(result);
 });
 
+/* DELETE remove a note */
+router.delete('/:noteId', async (req, res, next) => {
+	const result = await noteController.remove(req.session.userId, 
+		req.params.noteId
+	);
+	res.send(result);
+});
+
 module.exports = router;

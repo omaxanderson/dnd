@@ -1,5 +1,12 @@
 const db = require('../database/db');
 
+async function getNoteOwner(noteId) {
+	const noteOwner = await db.fetchOne(db.format(`SELECT user_id
+		FROM note
+		WHERE note_id = ?`, [noteId]));
+	return noteOwner.user_id;
+}
+
 async function index(userId) {
 	const sql = `SELECT *
 		FROM note
@@ -35,10 +42,8 @@ async function update(userId, noteId, changes) {
 		});
 	}
 
-	const noteOwner = userId = await db.fetchOne(db.format(`SELECT user_id
-		FROM note
-		WHERE note_id = ?`, [noteId]));
-	if (noteOwner.user_id !== userId) {
+	const noteOwnerId = await getNoteOwner(noteId);
+	if (noteOwnerId !== userId) {
 		return JSON.stringify({
 			error: `This note doesn't belong to you!`,
 		});
@@ -59,13 +64,37 @@ async function update(userId, noteId, changes) {
 	console.log(sql);
 
 	const result = await db.query(sql);
-	console.log(result);
 
-	return result;
+	return JSON.stringify({
+		affectedRows: result.affectedRows,
+	});
+}
+
+async function remove(userId, noteId) {
+	if (await getNoteOwner(noteId) !== userId) {
+		return JSON.stringify({
+			error: `This note doesn't belong to you!`,
+		});
+	}
+	const sql = db.format(`DELETE FROM note
+		WHERE note_id = ?
+		AND user_id = ?`, [noteId, userId]);
+	const result = await db.query(sql);
+	if (!result.affectedRows) {
+		return JSON.stringify({
+			error: `Note ID ${noteId} not found!`,
+		});
+	} else {
+		return JSON.stringify({
+			affectedRows: result.affectedRows,
+		});
+	}
+
 }
 
 module.exports = {
 	index,
 	create,
 	update,
+	remove,
 };

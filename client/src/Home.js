@@ -32,14 +32,15 @@ class Home extends React.Component {
 	test(e) {
 		e.preventDefault();
 		fetch('/api/notes/3', {
-			method: 'PUT',
+			method: 'DELETE',
 			headers: {
 				'Content-Type': 'application/json'
 			},
+			/*
 			body: JSON.stringify({
 				content: `here's the newest content! round 2!!!`,
 				title: 'new title too!',
-			}),
+			}), */
 			credentials: 'same-origin',
 			mode: 'cors'
 		})
