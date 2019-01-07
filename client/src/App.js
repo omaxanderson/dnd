@@ -2,13 +2,15 @@ import React from 'react';
 import {
 	BrowserRouter as Router,
 	Route,
-	Redirect
+	Redirect,
+	Switch
 } from 'react-router-dom';
 import Login from './auth/Login';
 import Logout from './auth/Logout';
 import Register from './auth/Register';
 import Home from './Home';
 import Notes from './Notes';
+import Note from './Note';
 const cookies = require('browser-cookies');
 
 
@@ -56,8 +58,9 @@ const Auth = {
 function App() {
 	return(
 		<Router>
-			<div>
+			<Switch>
 				<PrivateRoute exact path='/' component={ Home } />
+				<PrivateRoute path='/notes/:noteId' component={ Note } />
 				<PrivateRoute path='/notes' component={ Notes } />
 				<Route path='/login' 
 					render={props => {
@@ -90,7 +93,7 @@ function App() {
 						)
 					}}
 				/>
-			</div>
+			</Switch>
 		</Router>
 	);
 }

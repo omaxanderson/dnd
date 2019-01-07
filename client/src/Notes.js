@@ -18,16 +18,20 @@ class Notes extends React.Component {
 			.then(res => res.json())
 			.then(data => {
 				this.setState({ notes: data.notes });
+			})
+			.catch(err => {
+				console.log(err);
 			});
 	}
 
 	render() {
+		console.log(this.state.notes);
 		// create a small card for each note
 		const cards = this.state.notes.map(note => {
 			const snippet = note.content.slice(0, 50);
 			return (
 				// @TODO add that css style on hover that i used in the movienight project
-				<a href={`/notes/${note.noteId}`}>
+				<a href={`/notes/${note.note_id}`} key={note.note_id}>
 					<Card 
 						sSize={6}
 						mSize={4}
