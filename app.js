@@ -38,8 +38,11 @@ app.use(session({
 }));
 
 const apiMiddleware = (req, res, next) => {
+	// uncomment for session and cookie debugging
+	/*
 	console.log(req.session);
 	console.log(req.cookies);
+	*/
 
 	// check cookies
 
