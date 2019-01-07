@@ -1,14 +1,51 @@
 import React from 'react';
 import Navbar from './components/Navbar';
 import Editor from './components/Editor';
+import Card from './components/Card';
 
 class Notes extends React.Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			notes: [],
+		}
+	}
+
+	componentWillMount() {
+		console.log('test?');
+		fetch('/api/notes')
+			.then(res => res.json())
+			.then(data => {
+				this.setState({ notes: data.notes });
+			});
+	}
 
 	render() {
+		// create a small card for each note
+		const cards = this.state.notes.map(note => {
+			const snippet = note.content.slice(0, 50);
+			return (
+				// @TODO add that css style on hover that i used in the movienight project
+				<a href={`/notes/${note.noteId}`}>
+					<Card 
+						sSize={6}
+						mSize={4}
+						cardColor={'blue-grey'}
+						textColor={'white'}
+						cardTitle={note.title}
+						cardBody={snippet + (note.content.length > 50 ? '...' : '')}
+					/>
+				</a>
+			)
+		});;
 		return (
 			<React.Fragment>
 			<Navbar />
 			<div className='container'>
+				<div className='row' style={{marginTop: '20px'}}>
+					{cards}
+				</div>
 				<Editor
 
 				/>

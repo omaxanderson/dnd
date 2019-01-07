@@ -16,7 +16,6 @@ class ButtonBar extends React.Component {
 	}
 
 	render() {
-		console.log('rendering ButtonBar');
 		const toggleableButtons = [
 			'bold',
 			'italic',

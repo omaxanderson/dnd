@@ -23,20 +23,18 @@ class Card extends React.Component {
 		} = this.props;
 
 		return (
-			<div className='row' style={{marginTop:'20px'}}>
-				<div className={ 
-					`col 
-					s${sSize || this.DEFAULT_SIZE_SM} 
-					${sOffset >= 0 ? `offset-s${sOffset}` : ''}
-					m${mSize || this.DEFAULT_SIZE_M}
-					${mOffset >= 0 ? `offset-m${mOffset}` : ''}`
-				}>
-					<div className={ `card ${cardColor || ''}` }>
-						<div className={ `card-content 
-							${textColor ? `${textColor}-text` : ''}` }>
-							<span className='card-title'>{cardTitle}</span>
-							{ cardBody }
-						</div>
+			<div className={ 
+				`col 
+				s${sSize || this.DEFAULT_SIZE_SM} 
+				${sOffset >= 0 ? `offset-s${sOffset}` : ''}
+				m${mSize || this.DEFAULT_SIZE_M}
+				${mOffset >= 0 ? `offset-m${mOffset}` : ''}`
+			}>
+				<div className={ `card ${cardColor || ''}` }>
+					<div className={ `card-content 
+						${textColor ? `${textColor}-text` : ''}` }>
+						<span className='card-title'>{cardTitle}</span>
+						{ cardBody }
 					</div>
 				</div>
 			</div>

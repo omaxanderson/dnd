@@ -37,7 +37,7 @@ const Auth = {
 					});
 			})
 			.catch(err => {
-				console.log(err);
+				//console.log(err);
 				next(JSON.stringify(err));
 			});
 		/*
@@ -96,8 +96,8 @@ function App() {
 }
 
 function PrivateRoute({ component: Component, ...rest }) {
-	console.log(Auth);
-	console.log(Auth.accessToken);
+	//console.log(Auth);
+	//console.log(Auth.accessToken);
 	return (
 		<Route
 			{...rest}
