@@ -35,6 +35,7 @@ class Notes extends React.Component {
 						textColor={'white'}
 						cardTitle={note.title}
 						cardBody={snippet + (note.content.length > 50 ? '...' : '')}
+						hoverable='hoverable'
 					/>
 				</a>
 			)

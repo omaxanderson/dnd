@@ -20,7 +20,7 @@ async function index(userId) {
 		metadata: {
 			numResults: notes.length,
 		},
-		result: notes,
+		notes,
 	});
 }
 

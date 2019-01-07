@@ -19,7 +19,8 @@ class Card extends React.Component {
 			cardColor,
 			textColor,
 			cardTitle,
-			cardBody
+			cardBody,
+			hoverable
 		} = this.props;
 
 		return (
@@ -30,7 +31,7 @@ class Card extends React.Component {
 				m${mSize || this.DEFAULT_SIZE_M}
 				${mOffset >= 0 ? `offset-m${mOffset}` : ''}`
 			}>
-				<div className={ `card ${cardColor || ''}` }>
+				<div className={ `card ${cardColor || ''} ${hoverable || ''}` }>
 					<div className={ `card-content 
 						${textColor ? `${textColor}-text` : ''}` }>
 						<span className='card-title'>{cardTitle}</span>
