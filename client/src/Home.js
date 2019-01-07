@@ -31,15 +31,14 @@ class Home extends React.Component {
 
 	test(e) {
 		e.preventDefault();
-		fetch('/api/notes', {
-			method: 'POST',
+		fetch('/api/notes/3', {
+			method: 'PUT',
 			headers: {
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				test: 'test',
-				name: 'max',
-				dog: 'mongo'
+				content: `here's the newest content! round 2!!!`,
+				title: 'new title too!',
 			}),
 			credentials: 'same-origin',
 			mode: 'cors'
