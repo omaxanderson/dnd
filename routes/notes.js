@@ -8,6 +8,12 @@ router.get('/', async (req, res, next) => {
 	res.send(notes);
 });
 
+/* GET a specific note */
+router.get('/:noteId', async (req, res, next) => {
+	const note = await noteController.getOne(req.session.userId, req.params.noteId);
+	res.send(note);
+});
+
 /* POST a new note */
 router.post('/', async (req, res, next) => {
 	const result = await noteController.create(req.session.userId, req.body)

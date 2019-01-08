@@ -9,39 +9,49 @@ class Editor extends React.Component {
 			boldStatus: false,
 			italicStatus: false,
 			underlineStatus: false,
-			textContent: '',
 			lastSaveTimestamp: new Date(),
+			contentSet: false,
+			titleSet: false,
 		}
 
 		this.textEditorRef = React.createRef();
+		this.titleRef = React.createRef();
+		this.savedTextRef = React.createRef();
 	}
 
 	componentDidMount() {
 		this.textEditorRef.current.focus();
-
 		document.execCommand('justifyLeft');
-
-		// set interval to update our state every 5 seconds
-		/*
-		window.setInterval(() => {
-			const newTextContent = this.textEditorRef.current.innerHTML;
-			this.setState({textContent: newTextContent});
-		}, 5000);
-		*/
 	}
 
 	render() {
 		return (
 			<div className='editor'>
+				<h3 ref={this.titleRef} onKeyDown={this.handleButtonDown} className='title-edit' contentEditable='true'></h3>
+				<div ref={this.savedTextRef} className='right green-text' style={{marginTop: '50px'}} hidden>Your changes have been saved</div>
 				<ButtonBar 
 					execCommand={this.executeCommand}
 				/>
-				<div ref={this.textEditorRef} contentEditable onKeyDown={this.handleButtonDown} className='text-box'></div>
+				<div id='text-box' ref={this.textEditorRef} contentEditable onKeyDown={this.handleButtonDown} className='text-box'></div>
 			</div>
 		);
 	}
 
+	setTitleAndText(title, text) {
+		this.setState({textContent: text, title: title});
+		this.textEditorRef.current.innerHTML = text;
+		this.titleRef.current.innerHTML = title;
+	}
+
+	flashSaved = () => {
+		this.savedTextRef.current.hidden = false;
+		setTimeout(() => {
+			this.savedTextRef.current.hidden = true;
+		}, 4000);
+	}
+
 	handleButtonDown = (key, ...rest) => {
+		this.props.onKeyDown(key.target);
 		// console.log(key.which);
 		//console.log(`${key.metaKey ? 'Cmd + ' : ''} ${key.key}`);
 

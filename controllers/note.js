@@ -12,7 +12,6 @@ async function index(userId) {
 		FROM note
 		WHERE user_id = ${userId}
 		AND active = 1`;
-	console.log(sql);
 
 	const notes = await db.query(sql);
 
@@ -22,6 +21,20 @@ async function index(userId) {
 		},
 		notes,
 	});
+}
+
+async function getOne(userId, noteId) {
+	const notes = JSON.parse(await index(userId));
+	const note = notes.notes.find(item => {
+		return item.note_id == noteId;
+	});
+	if (!note) {
+		return JSON.stringify({
+			status: 'error',
+			message: 'Note not found',
+		});
+	}
+	return JSON.stringify(note);
 }
 
 async function create(userId, reqBody) {
@@ -37,6 +50,7 @@ async function create(userId, reqBody) {
 }
 
 async function update(userId, noteId, changes) {
+	console.log(changes);
 	if (!changes.content && !changes.title) {
 		return JSON.stringify({
 			error: 'No changes were submitted!',
@@ -96,6 +110,7 @@ async function remove(userId, noteId) {
 
 module.exports = {
 	index,
+	getOne,
 	create,
 	update,
 	remove,

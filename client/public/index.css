@@ -83,3 +83,22 @@ nav {
 .editor-select-container {
 	margin-top: 5px; /* this is also hard coded to equal the margin from the other buttons */
 }
+
+.title-edit {
+	outline: none;
+	display: inline-block;
+	padding: 5px;
+}
+
+.title-edit:focus {
+	border: 1px solid #AAAAAA;
+	border-radius: 5px;
+}
+
+.fade-out {
+	-webkit-transition: opacity 3s ease-in-out;
+    -moz-transition: opacity 3s ease-in-out;
+    -ms-transition: opacity 3s ease-in-out;
+    -o-transition: opacity 3s ease-in-out;
+     opacity: 1;
+}
