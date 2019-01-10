@@ -1,7 +1,9 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Editor from './components/Editor';
 
+/* props expected: none */
 class Note extends React.Component {
 	constructor(props) {
 		super(props);
@@ -67,7 +69,6 @@ class Note extends React.Component {
 
 	saveContent = () => {
 		const curDate = new Date();
-		console.log(curDate.getTime() - this.state.lastKeyPress.getTime());
 
 		// I don't really like this, it's basically assuming that the time
 		// taken between setting the timeout above and this being executed will
@@ -81,9 +82,8 @@ class Note extends React.Component {
 			changes.content = document.querySelector('#text-box').innerHTML;
 		}
 		if (this.state.titleHasChanged) {
-			changes.title = document.querySelector('#title-editor').innerHTML;
+			changes.title = document.querySelector('#title-edit').innerHTML;
 		}
-		console.log(changes);
 		if (!changes.content && !changes.title) {
 			return false;
 		}
@@ -98,7 +98,6 @@ class Note extends React.Component {
 		})
 			.then(res => res.json())
 			.then(data => {
-				console.log(data);
 				if (data.affectedRows) {
 					this.editorRef.current.flashSaved();
 				}
