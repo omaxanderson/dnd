@@ -12,7 +12,7 @@ class Home extends React.Component {
 					<h3>To Do</h3>
 					<div className='row'>
 						<div className='collection col s4'>
-							<a href='/notes' className='collection-item'>Note taking system</a>
+							<a href='/notes' className='collection-item'><s>Note taking system</s></a>
 							<a href='#!' className='collection-item'>Campaign Creator</a>
 							<a href='#!' className='collection-item'>Character Creation</a>
 							<a href='#!' className='collection-item'>Associate characters/users with campaigns</a>

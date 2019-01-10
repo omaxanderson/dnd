@@ -15,6 +15,7 @@ var loginRouter = require('./routes/login');
 var registerRouter = require('./routes/register');
 var logoutRouter = require('./routes/logout');
 var notesRouter = require('./routes/notes');
+var campaignsRouter = require('./routes/campaigns');
 
 var app = express();
 
@@ -87,6 +88,8 @@ const loginRegisterMiddleware = (req, res, next) => {
 app.use('/api', apiMiddleware, indexRouter);
 app.use('/api/user', apiMiddleware, usersRouter);
 app.use('/api/notes', apiMiddleware, notesRouter);
+app.use('/api/campaigns', apiMiddleware, campaignsRouter);
+
 app.use('/login', loginRegisterMiddleware, loginRouter);
 app.use('/logout', logoutRouter);
 app.use('/register', loginRegisterMiddleware, registerRouter);
