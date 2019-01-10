@@ -4,7 +4,7 @@ class Navbar extends React.Component {
 
 	render() {
 		return (
-			<div className='navbar-fixed'>
+			<div className='navbar-fixed' style={{marginBottom: '20px'}}>
 				<nav>
 					<div className='nav-wrapper'>
 						<a href='/' className='brand-logo'>Home</a>
