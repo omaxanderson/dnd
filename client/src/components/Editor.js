@@ -27,7 +27,7 @@ class Editor extends React.Component {
 	render() {
 		return (
 			<div className='editor'>
-				<h3 ref={this.titleRef} onKeyDown={this.handleButtonDown} className='title-edit' contentEditable='true'></h3>
+				<h3 id='title-edit' ref={this.titleRef} onKeyDown={this.handleButtonDown} className='title-edit' contentEditable='true'></h3>
 				<div ref={this.savedTextRef} className='right green-text' style={{marginTop: '50px'}} hidden>Your changes have been saved</div>
 				<ButtonBar 
 					execCommand={this.executeCommand}
