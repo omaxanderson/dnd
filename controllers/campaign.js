@@ -15,6 +15,12 @@ async function index(userId) {
 	});
 }
 
+async function getOne(userId, campaignId) {
+	const results = JSON.parse(await index(userId));
+	return JSON.stringify(results.campaigns.find(campaign => campaign.campaign_id = campaignId));
+}
+
 module.exports = {
 	index,
+	getOne,
 }

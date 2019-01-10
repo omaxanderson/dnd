@@ -32,7 +32,6 @@ class Note extends React.Component {
 			.catch(err => {
 				alert(err);
 			});;
-		// set an interval to constantly save/update the content after
 	}
 
 	render() {
