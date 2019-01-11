@@ -1,0 +1,35 @@
+- 
+   name: notes
+   routes:
+      - 
+         method: get
+         path: /
+         controllerMethod: index
+      - 
+         method: get
+         path: /:noteId
+         controllerMethod: getOne
+         params: 
+            - noteId
+      - 
+         method: post
+         path: /
+         controllerMethod: create
+         body: 
+            - title
+            - content
+      - 
+         method: put
+         path: /:noteId
+         controllerMethod: update
+         body: 
+            - changes
+         params:
+            - noteId
+      - 
+         method: delete
+         path: /:noteId
+         controllerMethod: remove
+         params: 
+            - noteId
+
