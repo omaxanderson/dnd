@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node app.js",
-	 "server": "nodemon index.js --ignore client"
+    "server": "nodemon index.js --ignore client"
   },
   "dependencies": {
     "bcrypt": "^3.0.3",
@@ -14,6 +14,7 @@
     "express-mysql-session": "^2.1.0",
     "express-session": "^1.15.6",
     "http-errors": "~1.6.2",
+    "js-yaml": "^3.12.1",
     "mysql": "^2.16.0",
     "nodemon": "^1.18.9",
     "uuid": "^3.3.2",
