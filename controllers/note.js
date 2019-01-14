@@ -1,4 +1,5 @@
 const db = require('../database/db');
+const tagsController = require('./tags');
 
 async function getNoteOwner(noteId) {
 	const noteOwner = await db.fetchOne(db.format(`SELECT user_id
@@ -34,6 +35,10 @@ async function getOne(userId, noteId) {
 			message: 'Note not found',
 		});
 	}
+
+	// start building out the note object
+	const tags = await tagsController.getTagsForNote(noteId);
+	note.tags = tags;
 	return JSON.stringify(note);
 }
 
