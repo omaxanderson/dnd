@@ -1,5 +1,6 @@
 import React from 'react';
 import ButtonBar from './ButtonBar';
+import TagForm from './TagForm';
 
 class Editor extends React.Component {
 	constructor(props) {
@@ -17,6 +18,7 @@ class Editor extends React.Component {
 		this.textEditorRef = React.createRef();
 		this.titleRef = React.createRef();
 		this.savedTextRef = React.createRef();
+		this.tagFormRef = React.createRef();
 	}
 
 	componentDidMount() {
@@ -25,10 +27,20 @@ class Editor extends React.Component {
 	}
 
 	render() {
+		// @TODO work on the note tag system
 		return (
 			<div className='editor'>
-				<h3 id='title-edit' ref={this.titleRef} onKeyDown={this.handleButtonDown} className='title-edit' contentEditable='true'></h3>
-				<div ref={this.savedTextRef} className='right green-text' style={{marginTop: '50px'}} hidden>Your changes have been saved</div>
+				<h3 
+					id='title-edit' 
+					ref={this.titleRef} 
+					onKeyDown={this.handleButtonDown} 
+					className='title-edit' 
+					contentEditable='true'
+					style={{marginTop: '0px'}}></h3>
+				<div ref={this.savedTextRef} className='right green-text' style={{marginTop: '30px'}} hidden>Your changes have been saved</div>
+
+				<TagForm ref={this.tagFormRef} />
+
 				<ButtonBar 
 					execCommand={this.executeCommand}
 				/>
@@ -46,6 +58,7 @@ class Editor extends React.Component {
 	flashSaved = () => {
 		this.savedTextRef.current.hidden = false;
 		setTimeout(() => {
+			// @TODO maybe this could be an add/remove class function to allow for transitions
 			this.savedTextRef.current.hidden = true;
 		}, 4000);
 	}
