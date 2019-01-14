@@ -28,7 +28,7 @@ class Notes extends React.Component {
 		console.log(this.state.notes);
 		// create a small card for each note
 		const cards = this.state.notes.map(note => {
-			const snippet = note.content.slice(0, 50);
+			const snippet = note.content.replace(/<[^>]+>/g, ' ').slice(0, 50);
 			return (
 				// @TODO add that css style on hover that i used in the movienight project
 				<a href={`/notes/${note.note_id}`} key={note.note_id}>
@@ -43,7 +43,7 @@ class Notes extends React.Component {
 					/>
 				</a>
 			)
-		});;
+		});
 		return (
 			<React.Fragment>
 			<Navbar />
@@ -51,9 +51,6 @@ class Notes extends React.Component {
 				<div className='row' style={{marginTop: '20px'}}>
 					{cards}
 				</div>
-				<Editor
-
-				/>
 				<h4>
 					Ideas
 				</h4>

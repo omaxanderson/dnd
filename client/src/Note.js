@@ -30,8 +30,18 @@ class Note extends React.Component {
 				this.editorRef.current.setTitleAndText(data.title, data.content);
 			})
 			.catch(err => {
-				alert(err);
-			});;
+				//alert(err);
+			});
+
+		// @TODO here we need to fetch the tag options
+		fetch(`/api/tags`)
+			.then(res => res.json())
+			.then(data => {
+				console.log(data);
+			})
+			.catch(err => {
+				console.log(err);
+			});
 	}
 
 	render() {
@@ -87,7 +97,7 @@ class Note extends React.Component {
 			return false;
 		}
 
-		fetch('/api/notes/1', {
+		fetch(`/api/notes/${this.state.noteId}`, {
 			method: 'PUT',
 			mode: 'cors',
 			body: JSON.stringify(changes),
