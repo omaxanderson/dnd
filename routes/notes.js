@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const noteController = require('../controllers/note');
 
 /* GET all notes for a user */
@@ -16,24 +16,19 @@ router.get('/:noteId', async (req, res, next) => {
 
 /* POST a new note */
 router.post('/', async (req, res, next) => {
-	const result = await noteController.create(req.session.userId, req.body)
+	const result = await noteController.create(req.session.userId, req.body);
 	res.send(result);
 });
 
 /* PUT update an existing note */
 router.put('/:noteId', async (req, res, next) => {
-	const result = await noteController.update(req.session.userId, 
-		req.params.noteId,
-		req.body
-	);
+	const result = await noteController.update(req.session.userId, req.params.noteId, req.body);
 	res.send(result);
 });
 
 /* DELETE remove a note */
 router.delete('/:noteId', async (req, res, next) => {
-	const result = await noteController.remove(req.session.userId, 
-		req.params.noteId
-	);
+	const result = await noteController.remove(req.session.userId, req.params.noteId);
 	res.send(result);
 });
 

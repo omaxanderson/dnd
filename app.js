@@ -1,25 +1,23 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var http = require('http');
-var bodyParser = require('body-parser');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const http = require('http');
 const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 const options = require('./database/sessionDbConfig.js');
+
 const sessionStore = new MySQLStore(options);
 
 // Routers
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var loginRouter = require('./routes/login');
-var registerRouter = require('./routes/register');
-var logoutRouter = require('./routes/logout');
-var notesRouter = require('./routes/notes');
-var campaignsRouter = require('./routes/campaigns');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const loginRouter = require('./routes/login');
+const registerRouter = require('./routes/register');
+const logoutRouter = require('./routes/logout');
+const notesRouter = require('./routes/notes');
+const campaignsRouter = require('./routes/campaigns');
 
-var app = express();
-
-const jsonParser = bodyParser.json();
+const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -33,9 +31,9 @@ app.use(session({
 	saveUninitialized: true,
 	cookie: {
 		secure: false,
-		maxAge: 1000 * 60 * 60 * 24 * 7 * 2 	// 2 weeks 
+		maxAge: 1000 * 60 * 60 * 24 * 7 * 2,	// 2 weeks
 	},
-	store: sessionStore
+	store: sessionStore,
 }));
 
 const apiMiddleware = (req, res, next) => {
@@ -97,38 +95,31 @@ app.use('/register', loginRegisterMiddleware, registerRouter);
 /**
  * Get port from environment and store in Express.
  */
-var port = process.env.PORT || '8080';
+const port = process.env.PORT || '8080';
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
-var server = http.createServer(app);
-
-/**
- * Listen on provided port, on all network interfaces.
- */
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+const server = http.createServer(app);
 
 function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
   }
 
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  const bind = typeof port === 'string'
+    ? `Pipe ${port}`
+    : `Port ${port}`;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
+      console.error(`${bind} requires elevated privileges`);
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
+      console.error(`${bind} is already in use`);
       process.exit(1);
       break;
     default:
@@ -140,10 +131,18 @@ function onError(error) {
  * Event listener for HTTP server "listening" event.
  */
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  console.log('Listening on ' + bind);
+  const addr = server.address();
+  const bind = typeof addr === 'string'
+    ? `pipe ${addr}`
+    : `port ${addr.port}`;
+  console.log(`Listening on ${bind}`);
 }
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
+
 module.exports = app;

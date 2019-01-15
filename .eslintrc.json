@@ -1,3 +1,10 @@
 {
-    "extends": "airbnb"
+    "extends": "airbnb",
+	 "rules": {
+		 "no-tabs": 0,
+		 "indent": [0, "tab"],
+		 "import/newline-after-import": 0,
+		 "no-unused-vars": [2, {"argsIgnorePattern": "next"}],
+		 "arrow-parens": 0
+	 }
 }
