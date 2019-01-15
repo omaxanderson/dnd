@@ -5,7 +5,7 @@ async function index(userId) {
 }
 
 async function getTagsForNote(noteId) {
-	const sql = db.format(`SELECT tag_id, name
+	const sql = db.format(`SELECT tag.tag_id, name
 		FROM tag
 			JOIN note_tag ON tag.tag_id = note_tag.tag_id 
 				AND note_id = ?`, 
