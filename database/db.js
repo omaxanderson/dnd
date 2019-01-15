@@ -2,17 +2,16 @@ const mysql = require('mysql');
 const dbconfig = require('./dbconfig');
 
 class db {
-
 	format(sql, params) {
 		return mysql.format(sql, params);
 	}
 
 	query(sql) {
 		return new Promise((resolve, reject) => {
-			var connection = mysql.createConnection(dbconfig);
+			const connection = mysql.createConnection(dbconfig);
 			connection.connect();
 
-			connection.query(sql, (err, rows, fields) => {
+			connection.query(sql, (err, rows) => {
 				if (err) {
 					reject(err);
 				} else {
@@ -25,10 +24,10 @@ class db {
 
 	fetchOne(sql) {
 		return new Promise((resolve, reject) => {
-			var connection = mysql.createConnection(dbconfig);
+			const connection = mysql.createConnection(dbconfig);
 			connection.connect();
 
-			connection.query(sql, (err, rows, fields) => {
+			connection.query(sql, (err, rows) => {
 				if (err) {
 					reject(err);
 				} else {

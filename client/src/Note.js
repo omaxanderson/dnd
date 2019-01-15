@@ -11,6 +11,7 @@ class Note extends React.Component {
 		this.state = {
 			textContent: '',
 			title: '',
+			tags: [],
 			contentHasChanged: false,
 			titleHasChanged: false,
 			noteId: this.props.match.params.noteId,
@@ -26,7 +27,8 @@ class Note extends React.Component {
 		fetch(`/api/notes/${this.state.noteId}`)
 			.then(res => res.json())
 			.then(data => {
-				this.setState({textContent: data.content, title: data.title});
+				// @TODO here we need to pass the tag info down into the editorRef
+				this.setState({textContent: data.content, title: data.title, tags: data.tags });
 				this.editorRef.current.setTitleAndText(data.title, data.content);
 			})
 			.catch(err => {

@@ -1,10 +1,9 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const controller = require('../controllers/register');
 
-
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/', (req, res, next) => {
 	controller.register(req);
 	res.send('register home');
 });
@@ -15,22 +14,22 @@ router.get('/', function(req, res, next) {
 // 	<optional> token: 'access token'
 // }
 /* POST register */
-router.post('/', function(req, res, next) {
+router.post('/', (req, res, next) => {
 	controller.register(req.body)
-		.then(result => {
+		.then(data => {
 			// this result should be an object and should have the user_id and token
-			result = JSON.parse(result);
+			const result = JSON.parse(data);
 			res.send(JSON.stringify({
 				success: true,
 				message: result.message,
-				token: result.token
+				token: result.token,
 			}));
 		})
 		.catch(err => {
 			res.status(400);
 			res.send(JSON.stringify({
 				success: false,
-				message: err
+				message: err,
 			}));
 		});
 });

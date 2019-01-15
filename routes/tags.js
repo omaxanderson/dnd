@@ -1,5 +1,5 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const tagsController = require('../controllers/tags');
 // @TODO this whole thing needs to actually be implemented, this is basically a skeleton
 

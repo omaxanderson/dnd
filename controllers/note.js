@@ -26,9 +26,7 @@ async function index(userId) {
 
 async function getOne(userId, noteId) {
 	const notes = JSON.parse(await index(userId));
-	const note = notes.notes.find(item => {
-		return item.note_id == noteId;
-	});
+	const note = notes.notes.find(item => Number(item.note_id) === Number(noteId));
 	if (!note) {
 		return JSON.stringify({
 			status: 'error',
@@ -47,11 +45,14 @@ async function create(userId, reqBody) {
 		VALUES (${userId}, ?, ?)`, [reqBody.content, reqBody.title]);
 	console.log(sql);
 	const result = await db.query(sql);
-	if (result.affectedRows) 
-	return JSON.stringify({
-		affectedRows: result.affectedRows,
-		noteId: result.lastInsertId,
-	});
+	if (result.affectedRows) {
+		return JSON.stringify({
+			affectedRows: result.affectedRows,
+			noteId: result.lastInsertId,
+		});
+	}
+		// @TODO need to fix this
+		return 'bad resp';
 }
 
 async function update(userId, noteId, changes) {
@@ -65,22 +66,22 @@ async function update(userId, noteId, changes) {
 	const noteOwnerId = await getNoteOwner(noteId);
 	if (noteOwnerId !== userId) {
 		return JSON.stringify({
-			error: `This note doesn't belong to you!`,
+			error: 'This note doesn\'t belong to you!',
 		});
 	}
 
-	let updateSql = ` updated_at = CURRENT_TIMESTAMP `;
+	let updateSql = ' updated_at = CURRENT_TIMESTAMP ';
 	if (changes.content) {
-		updateSql += db.format(`, content = ? `, [changes.content]);
+		updateSql += db.format(', content = ? ', [changes.content]);
 	}
 	if (changes.title) {
-		updateSql += db.format(`, title = ?`, [changes.title]);
+		updateSql += db.format(', title = ?', [changes.title]);
 	}
 
 	const sql = db.format(`UPDATE note
 		SET ${updateSql}
 		WHERE note_id = ?
-		AND user_id = ?`, [noteId, userId]); 
+		AND user_id = ?`, [noteId, userId]);
 	console.log(sql);
 
 	const result = await db.query(sql);
@@ -93,7 +94,7 @@ async function update(userId, noteId, changes) {
 async function remove(userId, noteId) {
 	if (await getNoteOwner(noteId) !== userId) {
 		return JSON.stringify({
-			error: `This note doesn't belong to you!`,
+			error: 'This note doesn\'t belong to you!',
 		});
 	}
 	const sql = db.format(`UPDATE note
@@ -105,12 +106,10 @@ async function remove(userId, noteId) {
 		return JSON.stringify({
 			error: `Note ID ${noteId} not found!`,
 		});
-	} else {
-		return JSON.stringify({
-			affectedRows: result.affectedRows,
-		});
 	}
-
+	return JSON.stringify({
+		affectedRows: result.affectedRows,
+	});
 }
 
 module.exports = {

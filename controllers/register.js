@@ -1,7 +1,7 @@
-const db = require('../database/db');
-const Auth = require('./login');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
+const db = require('../database/db');
+const Auth = require('./login');
 // @TODO this number is shared across files so I think this should be an env variable
 const SALT_ROUNDS = 6;
 
@@ -12,10 +12,10 @@ async function validateUsername(username) {
 
 	try {
 		const result = await db.fetchOne(sql);
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			resolve(result.usernameExists);
 		});
-	} catch(e) {
+	} catch (e) {
 		return e;
 	}
 }
@@ -27,15 +27,14 @@ async function insertUser(username, password, email) {
 	const sql = db.format(`INSERT INTO user (username, password, user_email, group_id) VALUES (
 			?, ?, ?, 2
 		)`,
-		[username, hashedPassword, email]
-	);
+		[username, hashedPassword, email]);
 	console.log(sql);
 	try {
 		const result = await db.query(sql);
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			resolve(result);
 		});
-	} catch(e) {
+	} catch (e) {
 		return e;
 	}
 }
@@ -45,17 +44,17 @@ async function register(params) {
 		username,
 		password,
 		passwordConf,
-		email
+		email,
 	} = params;
 
 	let valid = true;
 	let message = 'Success';
 
 	// make sure all our fields are here
-	if (!username ||
-		!password ||
-		!passwordConf ||
-		!email) {
+	if (!username
+		|| !password
+		|| !passwordConf
+		|| !email) {
 		valid = false;
 		message = 'Error: missing required field';
 	}
@@ -85,18 +84,18 @@ async function register(params) {
 		await insertUser(username, password, email);
 
 		// here we should also perform the login process
-		const authorized = await Auth.authorize({username, password});
-		return new Promise((resolve, reject) => {
+		const authorized = await Auth.authorize({ username, password });
+		return new Promise((resolve) => {
 			resolve(authorized);
-		})
-	} else {
-		console.log('rejecting register');
-		return new Promise((resolve, reject) => {
-			reject(message);
 		});
 	}
+
+	console.log('rejecting register');
+	return new Promise((resolve, reject) => {
+		reject(message);
+	});
 }
 
 module.exports = {
-	register
-}
+	register,
+};
