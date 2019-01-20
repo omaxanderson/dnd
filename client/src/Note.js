@@ -1,7 +1,8 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import Editor from './components/Editor';
+//import Editor from './components/Editor';
+import { Editor, EditorState, RichUtils, getDefaultKeyBinding } from 'draft-js';
 
 /* props expected: none */
 class Note extends React.Component {
@@ -11,11 +12,12 @@ class Note extends React.Component {
 		this.state = {
 			textContent: '',
 			title: '',
-			tags: [],
+			note: {},
 			contentHasChanged: false,
 			titleHasChanged: false,
 			noteId: this.props.match.params.noteId,
-			lastKeyPress: new Date()
+			lastKeyPress: new Date(),
+			editorState: EditorState.createEmpty(),
 		};
 
 		this.editorRef = React.createRef();
@@ -28,31 +30,67 @@ class Note extends React.Component {
 			.then(res => res.json())
 			.then(data => {
 				// @TODO here we need to pass the tag info down into the editorRef
-				this.setState({textContent: data.content, title: data.title, tags: data.tags });
-				this.editorRef.current.setTitleAndText(data.title, data.content);
+				this.setState({ note: data });
+				// this.editorRef.current.setTitleAndText(data.title, data.content);
 			})
 			.catch(err => {
 				//alert(err);
 			});
-
-		// @TODO here we need to fetch the tag options
-		fetch(`/api/tags`)
-			.then(res => res.json())
-			.then(data => {
-				console.log(data);
-			})
-			.catch(err => {
-				console.log(err);
-			});
 	}
+
+	onChange = (editorState) => {
+		this.setState({ editorState });
+	}
+
+	handleKeyCommand = (command, editorState) => {
+		const newState = RichUtils.handleKeyCommand(editorState, command);
+		if (newState) {
+			this.onChange(newState);
+			return 'handled';
+		}
+		return 'not-handled';
+	}
+
+	_mapKeyToEditorCommand(e) {
+	if (e.keyCode === 9 /* TAB */) {
+		const newEditorState = RichUtils.onTab(
+			e,
+			this.state.editorState,
+			4, /* maxDepth */
+		);
+		if (newEditorState !== this.state.editorState) {
+			this.onChange(newEditorState);
+		}
+		return;
+	}
+	return getDefaultKeyBinding(e);
+}
+
 
 	render() {
 		return (
 			<div>
 				<Navbar />
 				<div className='container'>
+					<div className='draftjs-editor'>
+						<Editor 
+							editorState={this.state.editorState}
+							handleKeyCommand={this.handleKeyCommand}
+							onChange={this.onChange}
+							keyBindingFn={this._mapKeyToEditorCommand}
+						/>
+					</div>
+				</div>
+			</div>
+		);
+		/*
+		return (
+			<div>
+				<Navbar />
+				<div className='container'>
 					<Editor
 						noteId={this.state.noteId}
+						note={this.state.note}
 						textContent={this.state.textContent}
 						title={this.state.title}
 						onKeyDown={this.onKeyDown}
@@ -63,9 +101,11 @@ class Note extends React.Component {
 				</div>
 			</div>
 		)
+		*/
 	}
 
 	onKeyDown = (target) => {
+		console.log('title edited');
 		const stateUpdate = {
 			lastKeyPress: new Date(),
 		};
@@ -79,6 +119,7 @@ class Note extends React.Component {
 	}
 
 	saveContent = () => {
+		console.log('saving title');
 		const curDate = new Date();
 
 		// I don't really like this, it's basically assuming that the time
@@ -94,6 +135,7 @@ class Note extends React.Component {
 		}
 		if (this.state.titleHasChanged) {
 			changes.title = document.querySelector('#title-edit').innerHTML;
+			console.log(changes.title);
 		}
 		if (!changes.content && !changes.title) {
 			return false;
