@@ -5,6 +5,7 @@ const tagsController = require('../controllers/tags');
 
 router.get('/', async (req, res, next) => {
 	// @TODO need more client-side input validation
+	console.log('tag index');
 	try {
 		const result = await tagsController.index(req.session.userId);
 		res.send(result);
@@ -53,3 +54,5 @@ router.delete('/', async (req, res, next) => {
 		res.send(e);
 	}
 });
+
+module.exports = router;
