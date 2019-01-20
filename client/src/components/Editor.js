@@ -36,15 +36,20 @@ class Editor extends React.Component {
 					onKeyDown={this.handleButtonDown} 
 					className='title-edit' 
 					contentEditable='true'
-					style={{marginTop: '0px'}}></h3>
+					style={{marginTop: '0px'}}
+					suppressContentEditableWarning={true}>
+						{this.props.note.title || ''}
+				</h3>
 				<div ref={this.savedTextRef} className='right green-text' style={{marginTop: '30px'}} hidden>Your changes have been saved</div>
 
-				<TagForm ref={this.tagFormRef} />
+				<TagForm note={this.props.note} ref={this.tagFormRef} />
 
 				<ButtonBar 
 					execCommand={this.executeCommand}
 				/>
-				<div id='text-box' ref={this.textEditorRef} contentEditable onKeyDown={this.handleButtonDown} className='text-box'></div>
+				<div id='text-box' ref={this.textEditorRef} contentEditable onKeyDown={this.handleButtonDown} className='text-box'
+					dangerouslySetInnerHTML={{__html: this.props.note.content || ''}}
+					suppressContentEditableWarning={true}></div>
 			</div>
 		);
 	}
