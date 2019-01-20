@@ -4,23 +4,30 @@ import M from 'materialize-css';
 
 class TagForm extends React.Component {
 
-	componentDidMount() {
+	initChips = () => {
+		// this reduce is required because of the dumb way the autocomplete arguments
+		// are required by the materialize chips component
+		const autocompleteTags = this.props.note.tags
+			.filter(item => !item.is_applied)
+			.reduce((accumulator, currentVal) => {
+				accumulator[`${currentVal.name}`] = null;
+				return accumulator;
+			}, {});
+
 		const elems = document.querySelector('.chips');
+
 		const options = {
-			data: [
-				// Here we actually need to be using the tags already supplied on the note
-				{ tag: 'chip 1' },
-				{ tag: 'chip 2' },
-				{ tag: 'max!' },
-			],
+			data: this.props.note.tags
+				.filter(item => {
+					return item.is_applied;
+				})
+				.map(item => {
+					return { tag: item.name };
+				}),
 			placeholder: 'Add a tag!',
 			secondaryPlaceholder: '+ Add New Tag',
 			autocompleteOptions: {
-				data: {
-					'Max': null,
-					'Anderson': null,
-					'Test': null,
-				},
+				data: autocompleteTags,
 			},
 			onChipAdd: (chip) =>{
 				console.log('added!');
@@ -33,12 +40,16 @@ class TagForm extends React.Component {
 				console.log('deleted!');
 			},
 		};
-		const instances = M.Chips.init(elems, options);
+
+		M.Chips.init(elems, options);
 	}
 
 	render() {
+		if (this.props.note && this.props.note.tags) {
+			this.initChips();
+		}
 		return (
-			<div className='chips chips-placeholder'></div>
+			<div className='chips chips-placeholder chips-autocomplete'></div>
 		);
 	}
 }
