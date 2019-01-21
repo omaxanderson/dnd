@@ -1,6 +1,10 @@
 import React from 'react';
 import Navbar from './components/Navbar';
-import {Editor, EditorState, RichUtils, getDefaultKeyBinding, convertToRaw, convertFromRaw } from 'draft-js';
+import TagForm from './components/TagForm';
+import { Editor, EditorState, RichUtils, getDefaultKeyBinding, convertToRaw, convertFromRaw } from 'draft-js';
+import { debounce } from 'lodash';
+
+// @TODO need to figure out a solution to this unordered list styling issue
 
 class RichEditorExample extends React.Component {
 	constructor(props) {
@@ -22,6 +26,7 @@ class RichEditorExample extends React.Component {
 			.then(res => res.json())
 			.then(data => {
 				// @TODO here we need to pass the tag info down into the editorRef
+				// Also @TODO need to initialize the tag form
 				console.log('in componentDidMount');
 				const loadedEditorState = EditorState.createWithContent(convertFromRaw(JSON.parse(data.content)));
 				console.log(loadedEditorState);
@@ -42,7 +47,34 @@ class RichEditorExample extends React.Component {
 		return false;
 	}
 
+	saveContent = debounce(() => {
+		console.log('sending ajax request');
+		// I should get the title, tags, and content and store 
+		// that in a single object to send off to the server
+		/*
+		fetch(`/api/notes/${this.state.noteId}`, {
+			method: 'PUT',
+			mode: 'cors',
+			body: JSON.stringify(changes),
+			headers: {
+				'Content-Type': 'application/json'
+			},
+		})
+			.then(res => res.json())
+			.then(data => {
+				if (data.affectedRows) {
+					this.editorRef.current.flashSaved();
+				}
+			})
+			.catch(err => {
+				console.log(err);
+			});
+			*/
+	}, 2500 /* Wait 2.5 seconds before auto-save */);
+
 	_mapKeyToEditorCommand(e) {
+		this.saveContent();
+
 		if (e.keyCode === 9 /* TAB */) {
 			const newEditorState = RichUtils.onTab(
 				e,
@@ -82,8 +114,6 @@ class RichEditorExample extends React.Component {
 
 	render() {
 		const {editorState} = this.state;
-		console.log('rendering');
-		console.log(editorState);
 		// If the user changes block type before entering any text, we can
 		// either style the placeholder or hide it. Let's just hide it now.
 		let className = 'RichEditor-editor';
@@ -99,6 +129,7 @@ class RichEditorExample extends React.Component {
 				<Navbar />
 				<div className='container'>
 				<button onClick={this.test}>B</button>
+				<TagForm />
 				<div className="RichEditor-root">
 					<BlockStyleControls
 						editorState={editorState}
