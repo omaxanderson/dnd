@@ -10,8 +10,14 @@ router.get('/', async (req, res, next) => {
 
 /* GET a specific note */
 router.get('/:noteId', async (req, res, next) => {
-	const note = await noteController.getOne(req.session.userId, req.params.noteId);
-	res.send(note);
+	try {
+		const note = await noteController.getOne(req.session.userId, req.params.noteId);
+		res.send(note);
+	} catch (e) {
+		console.log('oh noooo');
+		console.log(err);
+		res.send('bad');
+	}
 });
 
 /* POST a new note */

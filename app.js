@@ -45,7 +45,14 @@ const apiMiddleware = (req, res, next) => {
 	*/
 
 	// check cookies
-
+	if (!req.session.userId) {
+		res.clearCookie('accessToken');
+		res.send(JSON.stringify({
+			status: 401,
+			message: 'Unauthorized',
+		}));
+		return;
+	}
 
 	res.append('Access-Control-Allow-Origin', 'http://localhost:3000');
 	res.append('Access-Control-Allow-Headers', 'Content-Type');
