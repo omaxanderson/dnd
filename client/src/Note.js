@@ -1,16 +1,25 @@
 import React from 'react';
 import Navbar from './components/Navbar';
 import TagForm from './components/TagForm';
-import { Editor, EditorState, RichUtils, getDefaultKeyBinding, convertToRaw, convertFromRaw } from 'draft-js';
+import { 
+	Editor, 
+	EditorState, 
+	RichUtils, 
+	getDefaultKeyBinding, 
+	convertToRaw, 
+	convertFromRaw 
+} from 'draft-js';
 import { debounce } from 'lodash';
 
 // @TODO need to figure out a solution to this unordered list styling issue
 
-class RichEditorExample extends React.Component {
+class Note extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			editorState: EditorState.createEmpty()
+			editorState: EditorState.createEmpty(),
+			tags: null,
+			noteId: 0,
 		};
 
 		this.focus = () => this.refs.editor.focus();
@@ -30,7 +39,11 @@ class RichEditorExample extends React.Component {
 				console.log('in componentDidMount');
 				const loadedEditorState = EditorState.createWithContent(convertFromRaw(JSON.parse(data.content)));
 				console.log(loadedEditorState);
-				this.setState({ editorState: loadedEditorState });
+				this.setState({ 
+					noteId: this.props.match.params.noteId,
+					tags: data.tags,
+					editorState: loadedEditorState,
+				});
 				// this.editorRef.current.setTitleAndText(data.title, data.content);
 			})
 			.catch(err => {
@@ -112,6 +125,78 @@ class RichEditorExample extends React.Component {
 		console.log(JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent())));
 	}
 
+	// @TODO this noteAdd and noteDelete functions could probably be consolidated...
+	// on note add 
+	tagAdd = (e, tag) => {
+		let tags = this.state.tags;
+		let addedTag = tags.find((item) => item.name === tag.textContent.slice(0, -5));
+
+		// if that tag already exists (ie selected an autofill)
+		if (addedTag) {
+			addedTag.is_applied = 1;
+			this.setState({ tags });
+			// @TODO here we also need to send the api request to save the new tag
+			fetch(`/api/notes/${this.state.noteId}/tags/${addedTag.tag_id}`, {
+				method: 'POST',
+				mode: 'cors',
+			})
+				.then(res => res.json())
+				.then(data => {
+					console.log(data);
+				})
+				.catch(err => {
+					console.error('uh oh!');
+					console.log(err);
+				});
+		} else {
+			// create new tag
+			// @TODO need to move this ahead in the function, then basically call the above
+			// function to associate it after this returns
+			const tagText = tag.textContent.slice(0, -5);
+			fetch('/api/tags', {
+				method: 'POST',
+				mode: 'cors',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					name: tagText,
+				}),
+			}) 
+				.then(res => res.json())
+				.then(data => {
+					console.log(data);
+				})
+				.catch(err => {
+					console.error(err);
+				});
+		}
+	}
+
+	// on note delete
+	tagDelete = (e, tag) => {
+		let tags = this.state.tags;
+		let deletedTag = tags.find((item) => item.name === tag.textContent.slice(0, -5));
+		deletedTag.is_applied = 0;
+		this.setState({ tags });
+		// @TODO here we need to send the api request to remove that tag
+		
+		if (deletedTag) {
+			fetch(`/api/notes/${this.state.noteId}/tags/${deletedTag.tag_id}`, {
+				method: 'DELETE',
+				mode: 'cors',
+			})
+				.then(res => res.json())
+				.then(data => {
+					console.log(data);
+				})
+				.catch(err => {
+					console.error('uh oh!');
+					console.log(err);
+				});
+		}
+	}
+
 	render() {
 		const {editorState} = this.state;
 		// If the user changes block type before entering any text, we can
@@ -129,7 +214,11 @@ class RichEditorExample extends React.Component {
 				<Navbar />
 				<div className='container'>
 				<button onClick={this.test}>B</button>
-				<TagForm />
+				<TagForm 
+					tags={this.state.tags}
+					onTagAdd={this.tagAdd}
+					onTagDelete={this.tagDelete}
+				/>
 				<div className="RichEditor-root">
 					<BlockStyleControls
 						editorState={editorState}
@@ -157,6 +246,7 @@ class RichEditorExample extends React.Component {
 		);
 	}
 }
+
 
 // Custom overrides for "code" style.
 const styleMap = {
@@ -256,4 +346,4 @@ const InlineStyleControls = (props) => {
 	);
 };
 
-export default RichEditorExample;
+export default Note;

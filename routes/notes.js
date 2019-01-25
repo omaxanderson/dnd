@@ -38,4 +38,18 @@ router.delete('/:noteId', async (req, res, next) => {
 	res.send(result);
 });
 
+/* DELETE tag from note */
+router.delete('/:noteId/tags/:tagId', async (req, res, next) => {
+	// need to do a check to make sure note and tag id's are numeric to prevent injection
+	const result = await noteController.removeTagById(req.params.noteId, req.params.tagId);
+	res.send(result);
+});
+
+/* DELETE tag from note */
+router.post('/:noteId/tags/:tagId', async (req, res, next) => {
+	// need to do a check to make sure note and tag id's are numeric to prevent injection
+	const result = await noteController.addTagById(req.params.noteId, req.params.tagId);
+	res.send(result);
+});
+
 module.exports = router;

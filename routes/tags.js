@@ -27,7 +27,7 @@ router.get('/:tagId', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
 	try {
-		const result = await tagsController.create(req.session.userId);
+		const result = await tagsController.create(req.session.userId, req.body);
 		res.send(result);
 	} catch (e) {
 		res.status(500);

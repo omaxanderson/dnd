@@ -24,6 +24,47 @@ async function index(userId) {
 	});
 }
 
+async function addTagById(noteId, tagId) {
+	const sql = `INSERT INTO note_tag
+		VALUES (${tagId}, ${noteId})`;
+
+	const result = await db.query(sql);
+
+	return new Promise((resolve, reject) => {
+		if (result.affectedRows) {
+			resolve(JSON.stringify({
+				status: 'success',
+			}));
+		} else {
+			reject(JSON.stringify({
+				status: 'error',
+				message: `Tag id ${tagId} is not associated with note ${noteId}`,
+			}));
+		}
+	});
+}
+
+async function removeTagById(noteId, tagId) {
+	const sql = `DELETE FROM note_tag
+		WHERE note_id = ${noteId}
+		AND tag_id = ${tagId}`;
+
+	const result = await db.query(sql);
+
+	return new Promise((resolve, reject) => {
+		if (result.affectedRows) {
+			resolve(JSON.stringify({
+				status: 'success',
+			}));
+		} else {
+			reject(JSON.stringify({
+				status: 'error',
+				message: `Tag id ${tagId} is not associated with note ${noteId}`,
+			}));
+		}
+	});
+}
+
 async function getOne(userId, noteId) {
 	const notes = JSON.parse(await index(userId));
 	const note = notes.notes.find(item => Number(item.note_id) === Number(noteId));
@@ -118,4 +159,6 @@ module.exports = {
 	create,
 	update,
 	remove,
+	removeTagById,
+	addTagById,
 };

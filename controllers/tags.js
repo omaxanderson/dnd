@@ -32,11 +32,41 @@ async function getTagsForNote(noteId) {
 }
 
 async function getOne(tagId) {
+	const sql = db.format(`SELECT *
+		FROM tag
+		WHERE tag_id = ?`, [tagId]);
 
+	const result = await db.query(sql);
+
+	return result;
 }
 
-async function create(tagId) {
+async function create(userId, data) {
+	const sql = db.format(`INSERT INTO tag
+		(user_id, name, description) VALUES (
+			${userId}, 
+			?,
+			?)`, [
+				data.name || '', 
+				data.description || null
+			]
+	);
 
+	const result = await db.query(sql);
+	const tag = await getOne(result.insertId);
+
+	return new Promise((resolve, reject) => {
+		if (result.affectedRows) {
+			resolve(JSON.stringify({
+				status: 'success',
+				tag,
+			}));
+		} else {
+			reject(JSON.stringify({
+				status: 'error',
+			}));
+		}
+	});
 }
  
 async function update(tagId) {
