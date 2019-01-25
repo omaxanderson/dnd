@@ -59,7 +59,7 @@ async function create(userId, data) {
 		if (result.affectedRows) {
 			resolve(JSON.stringify({
 				status: 'success',
-				tag,
+				tag: tag[0],
 			}));
 		} else {
 			reject(JSON.stringify({

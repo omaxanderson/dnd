@@ -166,6 +166,14 @@ class Note extends React.Component {
 				.then(res => res.json())
 				.then(data => {
 					console.log(data);
+					// here we need to add this note to the state
+					let tags = this.state.tags;
+					tags.push({ 
+						tag_id: data.tag.tag_id,
+						name: data.tag.name,
+						is_applied: 1
+					});
+					this.setState({ tags });
 				})
 				.catch(err => {
 					console.error(err);
