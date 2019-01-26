@@ -21,8 +21,6 @@ class TagForm extends React.Component {
 			.map(item => {
 				return { tag: item.name };
 			});
-		console.log(autocompleteTags);
-		console.log(tagData);
 
 		const elems = document.querySelector('.chips');
 
@@ -47,8 +45,14 @@ class TagForm extends React.Component {
 		M.Chips.init(elems, options);
 	}
 
+	// This isn't terrible but there's probably a quicker way about this
+	shouldComponentUpdate(nextProps, nextState) {
+		return JSON.stringify(nextProps) !== JSON.stringify(this.props);
+	}
+
 	render() {
-		console.log(this.props.tags);
+		// @TODO eventually might want to implement a shouldComponentUpdate() function
+		console.log('tagForm rendering');
 		if (this.props.tags) {
 			this.initChips();
 		}

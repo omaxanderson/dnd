@@ -92,8 +92,8 @@ nav {
 
 .title-edit {
 	outline: none;
-	display: inline-block;
 	padding: 5px;
+	margin-bottom: 10px;
 }
 
 .title-edit:focus {

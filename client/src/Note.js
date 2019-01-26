@@ -20,6 +20,9 @@ class Note extends React.Component {
 			editorState: EditorState.createEmpty(),
 			tags: null,
 			noteId: 0,
+			title: '',
+			/* @TODO once we implement modals we'll need to dynamically set this */
+			inModalEditor: false,
 		};
 
 		this.focus = () => this.refs.editor.focus();
@@ -28,21 +31,23 @@ class Note extends React.Component {
 		this.mapKeyToEditorCommand = this._mapKeyToEditorCommand.bind(this);
 		this.toggleBlockType = this._toggleBlockType.bind(this);
 		this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
+
+		this.titleRef = React.createRef();
+		this.saveIndicatorRef = React.createRef();
 	}
 
 	componentDidMount() {
 		fetch(`/api/notes/${this.props.match.params.noteId}`)
 			.then(res => res.json())
 			.then(data => {
-				// @TODO here we need to pass the tag info down into the editorRef
-				// Also @TODO need to initialize the tag form
-				console.log('in componentDidMount');
-				const loadedEditorState = EditorState.createWithContent(convertFromRaw(JSON.parse(data.content)));
-				console.log(loadedEditorState);
+				const loadedEditorState = EditorState.createWithContent(
+					convertFromRaw(JSON.parse(data.content))
+				);
 				this.setState({ 
 					noteId: this.props.match.params.noteId,
 					tags: data.tags,
 					editorState: loadedEditorState,
+					title: data.title,
 				});
 				// this.editorRef.current.setTitleAndText(data.title, data.content);
 			})
@@ -60,33 +65,36 @@ class Note extends React.Component {
 		return false;
 	}
 
-	saveContent = debounce(() => {
+	debounceSaveContent = debounce(() => {
 		console.log('sending ajax request');
+		const noteData = {
+			content: JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent())),
+			title: this.titleRef.current.textContent,
+		};
+		console.log(JSON.stringify(noteData));
 		// I should get the title, tags, and content and store 
 		// that in a single object to send off to the server
-		/*
 		fetch(`/api/notes/${this.state.noteId}`, {
 			method: 'PUT',
 			mode: 'cors',
-			body: JSON.stringify(changes),
+			body: JSON.stringify(noteData),
 			headers: {
 				'Content-Type': 'application/json'
 			},
-		})
-			.then(res => res.json())
+		}).then(res => res.json())
 			.then(data => {
 				if (data.affectedRows) {
-					this.editorRef.current.flashSaved();
+					this.saveIndicatorRef.current.removeAttribute('hidden');
 				}
-			})
-			.catch(err => {
+			}).catch(err => {
 				console.log(err);
 			});
-			*/
-	}, 2500 /* Wait 2.5 seconds before auto-save */);
+	}, 2000); /* Wait 2 seconds before auto-save */
 
 	_mapKeyToEditorCommand(e) {
-		this.saveContent();
+		if (!this.state.inModalEditor) {
+			this.debounceSaveContent();
+		}
 
 		if (e.keyCode === 9 /* TAB */) {
 			const newEditorState = RichUtils.onTab(
@@ -121,10 +129,6 @@ class Note extends React.Component {
 		//console.log(JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent())));
 	}
 
-	test = () => {
-		console.log(JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent())));
-	}
-
 	// @TODO this noteAdd and noteDelete functions could probably be consolidated...
 	// on note add 
 	tagAdd = (e, tag) => {
@@ -150,8 +154,6 @@ class Note extends React.Component {
 				});
 		} else {
 			// create new tag
-			// @TODO need to move this ahead in the function, then basically call the above
-			// function to associate it after this returns
 			const tagText = tag.textContent.slice(0, -5);
 			fetch('/api/tags', {
 				method: 'POST',
@@ -165,8 +167,6 @@ class Note extends React.Component {
 			}) 
 				.then(res => res.json())
 				.then(data => {
-					console.log(data);
-					// here we need to add this note to the state
 					let tags = this.state.tags;
 					tags.push({ 
 						tag_id: data.tag.tag_id,
@@ -193,20 +193,15 @@ class Note extends React.Component {
 			fetch(`/api/notes/${this.state.noteId}/tags/${deletedTag.tag_id}`, {
 				method: 'DELETE',
 				mode: 'cors',
-			})
-				.then(res => res.json())
-				.then(data => {
-					console.log(data);
-				})
-				.catch(err => {
-					console.error('uh oh!');
-					console.log(err);
-				});
+			}).catch(err => {
+				console.error('uh oh!');
+				console.log(err);
+			});
 		}
 	}
 
 	render() {
-		const {editorState} = this.state;
+		const { editorState } = this.state;
 		// If the user changes block type before entering any text, we can
 		// either style the placeholder or hide it. Let's just hide it now.
 		let className = 'RichEditor-editor';
@@ -221,34 +216,52 @@ class Note extends React.Component {
 			<React.Fragment>
 				<Navbar />
 				<div className='container'>
-				<button onClick={this.test}>B</button>
-				<TagForm 
-					tags={this.state.tags}
-					onTagAdd={this.tagAdd}
-					onTagDelete={this.tagDelete}
-				/>
-				<div className="RichEditor-root">
-					<BlockStyleControls
-						editorState={editorState}
-						onToggle={this.toggleBlockType}
-					/>
-					<InlineStyleControls
-						editorState={editorState}
-						onToggle={this.toggleInlineStyle}
-					/>
-					<div className={className} onClick={this.focus}>
-					<Editor
-						blockStyleFn={getBlockStyle}
-						customStyleMap={styleMap}
-						editorState={editorState}
-						handleKeyCommand={this.handleKeyCommand}
-						keyBindingFn={this.mapKeyToEditorCommand}
-						onChange={this.onChange}
-						ref="editor"
-						spellCheck={true}
-					/>
+					<h5 className='title-edit' 
+						ref={this.titleRef}
+						contentEditable={true} 
+						suppressContentEditableWarning={true}
+						onKeyDown={this.debounceSaveContent}
+					>
+						{this.state.title}
+					</h5>
+					<div className='row'>
+						<div className='col s12 m8'>
+							<TagForm 
+								tags={this.state.tags}
+								onTagAdd={this.tagAdd}
+								onTagDelete={this.tagDelete}
+							/>
+						</div>
+						<div className='col s12 m4'
+								style={{ marginTop: '15px' }} >
+							<p 
+								ref={this.saveIndicatorRef} 
+								className='green-text' 
+							hidden>Note saved!</p>
+						</div>
 					</div>
-				</div>
+					<div className="RichEditor-root">
+						<BlockStyleControls
+							editorState={editorState}
+							onToggle={this.toggleBlockType}
+						/>
+						<InlineStyleControls
+							editorState={editorState}
+							onToggle={this.toggleInlineStyle}
+						/>
+						<div className={className} onClick={this.focus}>
+						<Editor
+							blockStyleFn={getBlockStyle}
+							customStyleMap={styleMap}
+							editorState={editorState}
+							handleKeyCommand={this.handleKeyCommand}
+							keyBindingFn={this.mapKeyToEditorCommand}
+							onChange={this.onChange}
+							ref="editor"
+							spellCheck={true}
+						/>
+						</div>
+					</div>
 				</div>
 			</React.Fragment>
 		);
