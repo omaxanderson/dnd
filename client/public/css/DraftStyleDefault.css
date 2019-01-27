@@ -54,52 +54,52 @@
  */
 
 /* @noflip */
-.public-DraftStyleDefault-depth0 .public-DraftStyleDefault-listLTR {
+.public-DraftStyleDefault-depth0.public-DraftStyleDefault-listLTR {
 	margin-left: 1.5em;
 }
 
 /* @noflip */
-.public-DraftStyleDefault-depth0 .public-DraftStyleDefault-listRTL {
+.public-DraftStyleDefault-depth0.public-DraftStyleDefault-listRTL {
 	margin-right: 1.5em;
 }
 
 /* @noflip */
-.public-DraftStyleDefault-depth1 .public-DraftStyleDefault-listLTR {
+.public-DraftStyleDefault-depth1.public-DraftStyleDefault-listLTR {
 	margin-left: 3em;
 }
 
 /* @noflip */
-.public-DraftStyleDefault-depth1 .public-DraftStyleDefault-listRTL {
+.public-DraftStyleDefault-depth1.public-DraftStyleDefault-listRTL {
 	margin-right: 3em;
 }
 
 /* @noflip */
-.public-DraftStyleDefault-depth2 .public-DraftStyleDefault-listLTR {
+.public-DraftStyleDefault-depth2.public-DraftStyleDefault-listLTR {
 	margin-left: 4.5em;
 }
 
 /* @noflip */
-.public-DraftStyleDefault-depth2 .public-DraftStyleDefault-listRTL {
+.public-DraftStyleDefault-depth2.public-DraftStyleDefault-listRTL {
 	margin-right: 4.5em;
 }
 
 /* @noflip */
-.public-DraftStyleDefault-depth3 .public-DraftStyleDefault-listLTR {
+.public-DraftStyleDefault-depth3.public-DraftStyleDefault-listLTR {
 	margin-left: 6em;
 }
 
 /* @noflip */
-.public-DraftStyleDefault-depth3 .public-DraftStyleDefault-listRTL {
+.public-DraftStyleDefault-depth3.public-DraftStyleDefault-listRTL {
 	margin-right: 6em;
 }
 
 /* @noflip */
-.public-DraftStyleDefault-depth4 .public-DraftStyleDefault-listLTR {
+.public-DraftStyleDefault-depth4.public-DraftStyleDefault-listLTR {
 	margin-left: 7.5em;
 }
 
 /* @noflip */
-.public-DraftStyleDefault-depth4 .public-DraftStyleDefault-listRTL {
+.public-DraftStyleDefault-depth4.public-DraftStyleDefault-listRTL {
 	margin-right: 7.5em;
 }
 
@@ -111,11 +111,23 @@
 	position: relative;
 }
 
-.public-DraftStyleDefault-unorderedListItem .public-DraftStyleDefault-depth0 {
+.public-DraftStyleDefault-unorderedListItem.public-DraftStyleDefault-depth4 {
+	list-style-type: square;
+}
+
+.public-DraftStyleDefault-unorderedListItem.public-DraftStyleDefault-depth3 {
+	list-style-type: square;
+}
+
+.public-DraftStyleDefault-unorderedListItem.public-DraftStyleDefault-depth2 {
+	list-style-type: square;
+}
+
+.public-DraftStyleDefault-unorderedListItem.public-DraftStyleDefault-depth0 {
 	list-style-type: disc;
 }
 
-.public-DraftStyleDefault-unorderedListItem .public-DraftStyleDefault-depth1 {
+.public-DraftStyleDefault-unorderedListItem.public-DraftStyleDefault-depth1 {
 	list-style-type: circle;
 }
 
@@ -129,7 +141,7 @@
 }
 
 /* @noflip */
-.public-DraftStyleDefault-orderedListItem .public-DraftStyleDefault-listLTR:before {
+.public-DraftStyleDefault-orderedListItem.public-DraftStyleDefault-listLTR:before {
 	left: -36px;
 	position: absolute;
 	text-align: right;
@@ -137,7 +149,7 @@
 }
 
 /* @noflip */
-.public-DraftStyleDefault-orderedListItem .public-DraftStyleDefault-listRTL:before {
+.public-DraftStyleDefault-orderedListItem.public-DraftStyleDefault-listRTL:before {
 	position: absolute;
 	right: -36px;
 	text-align: left;
@@ -154,42 +166,42 @@
 	counter-increment: ol0;
 }
 
-.public-DraftStyleDefault-orderedListItem .public-DraftStyleDefault-depth1:before {
+.public-DraftStyleDefault-orderedListItem.public-DraftStyleDefault-depth1:before {
 	content: counter(ol1,lower-alpha) ". ";
 	counter-increment: ol1;
 }
 
-.public-DraftStyleDefault-orderedListItem .public-DraftStyleDefault-depth2:before {
+.public-DraftStyleDefault-orderedListItem.public-DraftStyleDefault-depth2:before {
 	content: counter(ol2,lower-roman) ". ";
 	counter-increment: ol2;
 }
 
-.public-DraftStyleDefault-orderedListItem .public-DraftStyleDefault-depth3:before {
+.public-DraftStyleDefault-orderedListItem.public-DraftStyleDefault-depth3:before {
 	content: counter(ol3) ". ";
 	counter-increment: ol3;
 }
 
-.public-DraftStyleDefault-orderedListItem .public-DraftStyleDefault-depth4:before {
+.public-DraftStyleDefault-orderedListItem.public-DraftStyleDefault-depth4:before {
 	content: counter(ol4,lower-alpha) ". ";
 	counter-increment: ol4;
 }
 
-.public-DraftStyleDefault-depth0 .public-DraftStyleDefault-reset {
+.public-DraftStyleDefault-depth0.public-DraftStyleDefault-reset {
 	counter-reset: ol0;
 }
 
-.public-DraftStyleDefault-depth1 .public-DraftStyleDefault-reset {
+.public-DraftStyleDefault-depth1.public-DraftStyleDefault-reset {
 	counter-reset: ol1;
 }
 
-.public-DraftStyleDefault-depth2 .public-DraftStyleDefault-reset {
+.public-DraftStyleDefault-depth2.public-DraftStyleDefault-reset {
 	counter-reset: ol2;
 }
 
-.public-DraftStyleDefault-depth3 .public-DraftStyleDefault-reset {
+.public-DraftStyleDefault-depth3.public-DraftStyleDefault-reset {
 	counter-reset: ol3;
 }
 
-.public-DraftStyleDefault-depth4 .public-DraftStyleDefault-reset {
+.public-DraftStyleDefault-depth4.public-DraftStyleDefault-reset {
 	counter-reset: ol4;
 }
