@@ -121,6 +121,12 @@ nav {
 	margin-left: 20px;
 }
 
+.public-DraftStyleDefault-ul li {
+	display: list-item;
+	list-style-type: disc !important;
+	/* margin-left: 20px; */
+}
+
 .RichEditor-root {
   background: #fff;
   border: 1px solid #ddd;
