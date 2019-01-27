@@ -65,6 +65,7 @@ class Note extends React.Component {
 				.then(data => {
 					const tags = data.tags.map(item => {
 						item.is_applied = 0;
+						return item;
 					});
 					this.setState({ tags });
 				})
