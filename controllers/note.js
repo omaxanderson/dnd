@@ -86,14 +86,15 @@ async function create(userId, reqBody) {
 		VALUES (${userId}, ?, ?)`, [reqBody.content, reqBody.title]);
 	console.log(sql);
 	const result = await db.query(sql);
+	console.log(result);
 	if (result.affectedRows) {
 		return JSON.stringify({
 			affectedRows: result.affectedRows,
-			noteId: result.lastInsertId,
+			noteId: result.insertId,
 		});
 	}
-		// @TODO need to fix this
-		return 'bad resp';
+	// @TODO need to fix this
+	return 'bad resp';
 }
 
 async function update(userId, noteId, changes) {

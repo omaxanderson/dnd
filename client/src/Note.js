@@ -20,11 +20,13 @@ class Note extends React.Component {
 			editorState: EditorState.createEmpty(),
 			tags: null,
 			noteId: 0,
-			title: '',
-			/* @TODO once we implement modals we'll need to dynamically set this */
+			title: this.props.isNewNote ? 'Untitled' : '',
+			/* @TODO once we implement modals we'll need to actually set this */
 			inModalEditor: false,
+			isNewNote: this.props.isNewNote || false,
 		};
 
+		// function bindings
 		this.focus = () => this.refs.editor.focus();
 		this.onChange = (editorState) => this.setState({editorState});
 		this.handleKeyCommand = this._handleKeyCommand.bind(this);
@@ -32,28 +34,44 @@ class Note extends React.Component {
 		this.toggleBlockType = this._toggleBlockType.bind(this);
 		this.toggleInlineStyle = this._toggleInlineStyle.bind(this);
 
+		// creating refs
 		this.titleRef = React.createRef();
 		this.saveIndicatorRef = React.createRef();
 	}
 
 	componentDidMount() {
-		fetch(`/api/notes/${this.props.match.params.noteId}`)
-			.then(res => res.json())
-			.then(data => {
-				const loadedEditorState = EditorState.createWithContent(
-					convertFromRaw(JSON.parse(data.content))
-				);
-				this.setState({ 
-					noteId: this.props.match.params.noteId,
-					tags: data.tags,
-					editorState: loadedEditorState,
-					title: data.title,
+		// get our note data if this is an existing note
+		if (!this.state.isNewNote) {
+			fetch(`/api/notes/${this.props.match.params.noteId}`)
+				.then(res => res.json())
+				.then(data => {
+					const loadedEditorState = EditorState.createWithContent(
+						convertFromRaw(JSON.parse(data.content))
+					);
+					this.setState({ 
+						noteId: this.props.match.params.noteId,
+						tags: data.tags,
+						editorState: loadedEditorState,
+						title: data.title,
+					});
+					// this.editorRef.current.setTitleAndText(data.title, data.content);
+				})
+				.catch(err => {
+					//alert(err);
 				});
-				// this.editorRef.current.setTitleAndText(data.title, data.content);
-			})
-			.catch(err => {
-				//alert(err);
-			});
+		} else {
+			// just get tags
+			fetch('/api/tags').then(res => res.json())
+				.then(data => {
+					const tags = data.tags.map(item => {
+						item.is_applied = 0;
+					});
+					this.setState({ tags });
+				})
+				.catch(err =>{
+					console.error(err);
+				});
+		}
 	}
 
 	_handleKeyCommand(command, editorState) {
@@ -65,17 +83,27 @@ class Note extends React.Component {
 		return false;
 	}
 
+	flashSaved = (type) => {
+		this.saveIndicatorRef.current.classList.remove('saved-text-fade-out');
+		this.saveIndicatorRef.current.removeAttribute('hidden');
+		setTimeout(() => {
+			this.saveIndicatorRef.current.classList.add('saved-text-fade-out');
+		}, 2500);
+	}
+
 	debounceSaveContent = debounce(() => {
-		console.log('sending ajax request');
 		const noteData = {
 			content: JSON.stringify(convertToRaw(this.state.editorState.getCurrentContent())),
 			title: this.titleRef.current.textContent,
 		};
-		console.log(JSON.stringify(noteData));
-		// I should get the title, tags, and content and store 
-		// that in a single object to send off to the server
-		fetch(`/api/notes/${this.state.noteId}`, {
-			method: 'PUT',
+
+		const url = `/api/notes${
+			!this.state.isNewNote ? `/${this.state.noteId}` : ''
+		}`;
+		const method = this.state.isNewNote ? 'POST' : 'PUT';
+
+		fetch(url, {
+			method,
 			mode: 'cors',
 			body: JSON.stringify(noteData),
 			headers: {
@@ -84,7 +112,11 @@ class Note extends React.Component {
 		}).then(res => res.json())
 			.then(data => {
 				if (data.affectedRows) {
-					this.saveIndicatorRef.current.removeAttribute('hidden');
+					this.flashSaved('Note');
+				}
+				if (this.state.isNewNote) {
+					this.setState({ isNewNote: false, noteId: data.noteId });
+					this.props.history.push(`/notes/${data.noteId}`);
 				}
 			}).catch(err => {
 				console.log(err);
@@ -147,6 +179,7 @@ class Note extends React.Component {
 				.then(res => res.json())
 				.then(data => {
 					console.log(data);
+					this.flashSaved('Note');
 				})
 				.catch(err => {
 					console.error('uh oh!');
@@ -174,6 +207,7 @@ class Note extends React.Component {
 						is_applied: 1
 					});
 					this.setState({ tags });
+					this.flashSaved('Note');
 				})
 				.catch(err => {
 					console.error(err);
@@ -193,6 +227,8 @@ class Note extends React.Component {
 			fetch(`/api/notes/${this.state.noteId}/tags/${deletedTag.tag_id}`, {
 				method: 'DELETE',
 				mode: 'cors',
+			}).then(res => {
+				this.flashSaved('Tag');
 			}).catch(err => {
 				console.error('uh oh!');
 				console.log(err);
@@ -237,7 +273,8 @@ class Note extends React.Component {
 							<p 
 								ref={this.saveIndicatorRef} 
 								className='green-text' 
-							hidden>Note saved!</p>
+								hidden
+							>Note saved!</p>
 						</div>
 					</div>
 					<div className="RichEditor-root">

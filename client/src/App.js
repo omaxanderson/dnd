@@ -62,6 +62,7 @@ function App() {
 		<Router>
 			<Switch>
 				<PrivateRoute exact path='/' component={ Home } />
+				<PrivateRoute path='/notes/create' component={ Note } isNewNote={ true } />
 				<PrivateRoute path='/notes/:noteId' component={ Note } />
 				<PrivateRoute path='/notes' component={ Notes } />
 				<PrivateRoute path='/campaigns/:campaignId' component={ Campaign } />
@@ -105,12 +106,13 @@ function App() {
 function PrivateRoute({ component: Component, ...rest }) {
 	//console.log(Auth);
 	//console.log(Auth.accessToken);
+	console.log(rest);
 	return (
 		<Route
 			{...rest}
 			render={ props => 
 				Auth.accessToken ? (
-					<Component {...props} />
+					<Component {...props} {...rest} />
 				) : (
 					<Redirect
 						to={{

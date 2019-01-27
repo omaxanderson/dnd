@@ -101,6 +101,12 @@ nav {
 	border-radius: 5px;
 }
 
+.saved-text-fade-out {
+	visibility: hidden;
+	opacity: 0;
+	transition: visibility 0s 1s, opacity 1s linear;
+}
+
 .fade-out {
 	-webkit-transition: opacity 3s ease-in-out;
     -moz-transition: opacity 3s ease-in-out;
