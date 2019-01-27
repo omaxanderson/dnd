@@ -2596,14 +2596,16 @@ textarea {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 
+/*
 ul:not(.browser-default) {
-  padding-left: 0;
-  list-style-type: none;
+  padding-left: 20;
+  list-style-type: disc;
 }
 
 ul:not(.browser-default) > li {
-  list-style-type: none;
+  list-style-type: disc;
 }
+*/
 
 a {
   color: #039be5;

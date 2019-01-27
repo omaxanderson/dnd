@@ -124,6 +124,11 @@ class Note extends React.Component {
 			});
 	}, 2000); /* Wait 2 seconds before auto-save */
 
+	_onTab = (e) => {
+		const maxDepth = 4;
+		this.onChange(RichUtils.onTab(e, this.state.editorState, maxDepth));
+	}
+
 	_mapKeyToEditorCommand(e) {
 		if (!this.state.inModalEditor) {
 			this.debounceSaveContent();
@@ -294,6 +299,7 @@ class Note extends React.Component {
 							editorState={editorState}
 							handleKeyCommand={this.handleKeyCommand}
 							keyBindingFn={this.mapKeyToEditorCommand}
+							onTab={this._onTab}
 							onChange={this.onChange}
 							ref="editor"
 							spellCheck={true}

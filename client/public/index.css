@@ -115,6 +115,7 @@ nav {
      opacity: 1;
 }
 
+/*
 .public-DraftStyleDefault-ul {
 	display: list-item;
 	list-style-type: disc !important;
@@ -125,7 +126,7 @@ nav {
 	display: list-item;
 	list-style-type: disc !important;
 	/* margin-left: 20px; */
-}
+/* } */
 
 .RichEditor-root {
   background: #fff;
