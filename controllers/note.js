@@ -98,7 +98,7 @@ async function create(userId, reqBody) {
 }
 
 async function update(userId, noteId, changes) {
-	console.log(changes);
+	console.log(userId);
 	if (!changes.content && !changes.title) {
 		return JSON.stringify({
 			error: 'No changes were submitted!',
@@ -112,21 +112,16 @@ async function update(userId, noteId, changes) {
 		});
 	}
 
-	let updateSql = ' updated_at = CURRENT_TIMESTAMP ';
-	if (changes.content) {
-		updateSql += db.format(', content = ? ', [changes.content]);
-	}
-	if (changes.title) {
-		updateSql += db.format(', title = ?', [changes.title]);
-	}
-
 	const sql = db.format(`UPDATE note
-		SET ${updateSql}
+		SET updated_at = CURRENT_TIMESTAMP,
+			content = ?,
+			title = ?
 		WHERE note_id = ?
-		AND user_id = ?`, [noteId, userId]);
-	console.log(sql);
+		AND user_id = ?`, [changes.content, changes.title, noteId, userId]
+	);
 
 	const result = await db.query(sql);
+	console.log(result);
 
 	return JSON.stringify({
 		affectedRows: result.affectedRows,
