@@ -9,6 +9,7 @@ class Notes extends React.Component {
 
 		this.state = {
 			notes: [],
+			sortMethod: sortByCreated,
 		}
 	}
 
@@ -25,20 +26,27 @@ class Notes extends React.Component {
 	}
 
 	render() {
-		console.log(this.state.notes);
 		// create a small card for each note
 		const cards = this.state.notes.map(note => {
-			const snippet = note.content.replace(/<[^>]+>/g, ' ').slice(0, 50);
+			// create simple JSX components for the tag display
+			const { 
+				title, 
+				created_at, 
+				updated_at,
+			} = note;
+			const tags = note.tags && note.tags.map(tag => {
+				return <div className='chip'>{tag.name}</div>;
+			});
 			return (
 				// @TODO add that css style on hover that i used in the movienight project
-				<a href={`/notes/${note.note_id}`} key={note.note_id}>
+				<a href={`/notes/${note.noteId}`} key={note.noteId}>
 					<Card 
-						sSize={6}
-						mSize={4}
+						sSize={12}
+						mSize={12}
 						cardColor={'blue-grey'}
 						textColor={'white'}
 						cardTitle={note.title}
-						cardBody={snippet + (note.content.length > 50 ? '...' : '')}
+						cardBody={tags}
 						hoverable='hoverable'
 					/>
 				</a>
@@ -72,6 +80,23 @@ class Notes extends React.Component {
 		);
 	}
 
+}
+
+// Sorting functions
+function sortByCreated(a, b) {
+	return a.createdAt > b.createdAt;
+}
+
+function sortByLastModified(a, b) {
+	return a.updatedAt > b.createdAt;
+}
+
+function sortAlphabeticallyAsc(a, b) {
+	return a.title > b.title;
+}
+
+function sortAlphabeticallyDesc(a, b) {
+	return a.title < b.title;
 }
 
 export default Notes;

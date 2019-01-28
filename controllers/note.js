@@ -8,13 +8,43 @@ async function getNoteOwner(noteId) {
 	return noteOwner.user_id;
 }
 
+// @TODO we want to be able to choose which fields we want
+// for example, the note listing doesn't need content which takes up the most
+// space, so it would be nice to be able to omit that
 async function index(userId) {
-	const sql = `SELECT *
+	const sql = `SELECT 
+			note.note_id AS noteId, 
+			note.created_at AS createdAt,
+			note.updated_at AS updatedAt,
+			note.title AS title,
+			note.content AS content,
+			GROUP_CONCAT(CONCAT(tag.tag_id, ':', tag.name) SEPARATOR ',') AS tags
 		FROM note
-		WHERE user_id = ${userId}
-		AND active = 1`;
+			LEFT JOIN note_tag USING (note_id)
+			LEFT JOIN tag USING (tag_id)
+		WHERE note.user_id = ${userId}
+		AND active = 1
+		GROUP BY note.note_id`;
 
-	const notes = await db.query(sql);
+	let result = await db.query(sql);
+	result.forEach(item => {
+		result.test = 'heyyy';
+	});
+
+	// parse the tags
+	const notes = result.map(item => {
+		if (!item.tags) {
+			return {...item};
+		}
+		const tags = item.tags.split(',').map(tag => {
+			const pieces = tag.split(':');
+			return { noteId: pieces[0], name: pieces[1] };
+		});
+		return {
+			...item,
+			tags
+		};
+	});
 
 	return JSON.stringify({
 		metadata: {
@@ -67,7 +97,7 @@ async function removeTagById(noteId, tagId) {
 
 async function getOne(userId, noteId) {
 	const notes = JSON.parse(await index(userId));
-	const note = notes.notes.find(item => Number(item.note_id) === Number(noteId));
+	const note = notes.notes.find(item => Number(item.noteId) === Number(noteId));
 	if (!note) {
 		return JSON.stringify({
 			status: 'error',

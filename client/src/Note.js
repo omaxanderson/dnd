@@ -40,6 +40,7 @@ class Note extends React.Component {
 	}
 
 	componentDidMount() {
+		console.log('note mounted?');
 		// get our note data if this is an existing note
 		if (!this.state.isNewNote) {
 			fetch(`/api/notes/${this.props.match.params.noteId}`)
@@ -60,6 +61,7 @@ class Note extends React.Component {
 					//alert(err);
 				});
 		} else {
+			console.log('just getting tags?');
 			// just get tags
 			fetch('/api/tags').then(res => res.json())
 				.then(data => {
