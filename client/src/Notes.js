@@ -2,6 +2,7 @@ import React from 'react';
 import Navbar from './components/Navbar';
 import Editor from './components/Editor';
 import Card from './components/Card';
+import moment from 'moment';
 
 class Notes extends React.Component {
 	constructor(props) {
@@ -9,12 +10,11 @@ class Notes extends React.Component {
 
 		this.state = {
 			notes: [],
-			sortMethod: sortByCreated,
+			sortMethod: sortByLastModifiedDesc,
 		}
 	}
 
 	componentWillMount() {
-		console.log('test?');
 		fetch('/api/notes')
 			.then(res => res.json())
 			.then(data => {
@@ -27,26 +27,47 @@ class Notes extends React.Component {
 
 	render() {
 		// create a small card for each note
-		const cards = this.state.notes.map(note => {
+		const cards = this.state.notes
+			.sort(this.state.sortMethod)
+			.map(note => {
 			// create simple JSX components for the tag display
 			const { 
 				title, 
-				created_at, 
-				updated_at,
+				createdAt, 
+				updatedAt,
 			} = note;
+			const dateFormat = {
+				weekday: 'short',
+				year: '2-digit',
+				month: 'short',
+				day: '2-digit',
+			};
+			const createdAtDate = moment(createdAt).calendar();
+			const updatedAtDate = moment(updatedAt).calendar();
 			const tags = note.tags && note.tags.map(tag => {
 				return <div className='chip'>{tag.name}</div>;
 			});
+			const body = (
+				<div>
+					{tags}
+					<div className='grey-text text-lighten-2'>Created: {createdAtDate}</div>
+					{updatedAt &&
+						<div className='grey-text text-lighten-2'>Updated: {updatedAtDate}</div>
+					}
+				</div>
+			);
 			return (
 				// @TODO add that css style on hover that i used in the movienight project
 				<a href={`/notes/${note.noteId}`} key={note.noteId}>
 					<Card 
+						key={note.noteId + 'card'}
+						idx={note.noteId}
 						sSize={12}
 						mSize={12}
 						cardColor={'blue-grey'}
 						textColor={'white'}
 						cardTitle={note.title}
-						cardBody={tags}
+						cardBody={body}
 						hoverable='hoverable'
 					/>
 				</a>
@@ -84,19 +105,42 @@ class Notes extends React.Component {
 
 // Sorting functions
 function sortByCreated(a, b) {
-	return a.createdAt > b.createdAt;
+	if (a.createdAt < b.createdAt) {
+		return -1;
+	} else if (a.createdAt > b.createdAt) {
+		return 1;
+	}
+	return 0;
+}
+
+function sortByCreatedDesc(a, b) {
+	return sortByCreated(b, a);
 }
 
 function sortByLastModified(a, b) {
-	return a.updatedAt > b.createdAt;
+	if (a.updatedAt < b.updatedAt) {
+		return -1;
+	} else if (a.updatedAt > b.updatedAt) {
+		return 1;
+	}
+	return 0;
+}
+
+function sortByLastModifiedDesc(a, b) {
+	return sortByLastModified(b, a);
 }
 
 function sortAlphabeticallyAsc(a, b) {
-	return a.title > b.title;
+	if (a.title.toLowerCase() < b.title.toLowerCase()) {
+		return -1;
+	} else if (a.title.toLowerCase() > b.title.toLowerCase()) {
+		return 1;
+	}
+	return 0;
 }
 
 function sortAlphabeticallyDesc(a, b) {
-	return a.title < b.title;
+	return -1 * sortAlphabeticallyAsc(a, b)
 }
 
 export default Notes;

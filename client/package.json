@@ -6,6 +6,7 @@
     "browser-cookies": "^1.2.0",
     "draft-js": "^0.10.5",
     "materialize-css": "^1.0.0-rc.2",
+    "moment": "^2.24.0",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",
     "react-router": "^4.3.1",

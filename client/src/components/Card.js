@@ -30,7 +30,8 @@ class Card extends React.Component {
 				${sOffset >= 0 ? `offset-s${sOffset}` : ''}
 				m${mSize || this.DEFAULT_SIZE_M}
 				${mOffset >= 0 ? `offset-m${mOffset}` : ''}`
-			}>
+			}
+			key={this.props.idx}>
 				<div className={ `card ${cardColor || ''} ${hoverable || ''}` }>
 					<div className={ `card-content 
 						${textColor ? `${textColor}-text` : ''}` }>
