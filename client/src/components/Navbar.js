@@ -17,7 +17,7 @@ class Navbar extends React.Component {
 		return (
 			<React.Fragment>
 				<ul id='createDropdown' className='dropdown-content'>
-					<li><Link to='/notes/create'>Note</Link></li>
+					<li><a href='/notes/create'>Note</a></li>
 					<li><a href='#!'>Campaign</a></li>
 					<li><a href='#!'>Character</a></li>
 					<li><a href='#!'>Item</a></li>
@@ -30,8 +30,8 @@ class Navbar extends React.Component {
 								<li><a className='dropdown-trigger' href='#!' data-target='createDropdown'>
 									<i className='material-icons'>add</i>
 								</a></li>
-								<li><a href='#!'>Item 1</a></li>
-								<li><a href='#!'>Item 2</a></li>
+								<li><a href='/notes'>Notes</a></li>
+								<li><a href='/tags'>Tags</a></li>
 								<li><a href='#!'>Item 3</a></li>
 							</ul>
 						</div>
