@@ -10,6 +10,7 @@ import Logout from './auth/Logout';
 import Register from './auth/Register';
 import Home from './Home';
 import Notes from './Notes';
+import Tags from './Tags';
 import Note from './Note';
 import CampaignList from './CampaignList';
 import Campaign from './Campaign';
@@ -65,6 +66,7 @@ function App() {
 				<PrivateRoute path='/notes/create' component={ Note } isNewNote={ true } />
 				<PrivateRoute path='/notes/:noteId' component={ Note } />
 				<PrivateRoute path='/notes' component={ Notes } />
+				<PrivateRoute path='/tags' component={ Tags } />
 				<PrivateRoute path='/campaigns/:campaignId' component={ Campaign } />
 				<PrivateRoute path='/campaigns' component={ CampaignList } />
 				<Route path='/login' 
