@@ -15,6 +15,16 @@ router.get('/', async (req, res, next) => {
 	}
 });
 
+router.get('/notes/:tagId', async (req, res, next) => {
+	try {
+		const result = await tagsController.getNotesForTag(req.params.tagId);
+		res.send(result);
+	} catch (e) {
+		res.status(500);
+		res.send(e);
+	}
+});
+
 router.get('/:tagId', async (req, res, next) => {
 	try {
 		const result = await tagsController.getOne(req.session.userId);

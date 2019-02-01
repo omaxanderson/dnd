@@ -1,9 +1,11 @@
 const db = require('../database/db');
 
 async function index(userId) {
-	const sql = `SELECT *
+	const sql = `SELECT tag.*, COUNT(note_id) AS numNotes
 		FROM tag
-		WHERE user_id = ${userId}`;
+			LEFT JOIN note_tag ON note_tag.tag_id = tag.tag_id
+		WHERE user_id = ${userId}
+		GROUP BY tag_id`;
 
 	const tags = await db.query(sql);
 
@@ -13,6 +15,28 @@ async function index(userId) {
 		},
 		tags,
 	});
+}
+
+async function getNotesForTag(tagId) {
+	const sql = db.format(
+		`SELECT note_tag.note_id, note.title
+		FROM note_tag
+			LEFT JOIN note ON note.note_id = note_tag.note_id
+		WHERE note_tag.tag_id = ?`, [tagId]
+	);
+
+	// @TODO better error handling
+	try {
+		const result = await db.query(sql);
+		return {
+			metadata: {
+				numRows: result.length,
+			},
+			notes: result,
+		};
+	} catch (e) {
+		return e;
+	}
 }
 
 async function getTagsForNote(noteId) {
@@ -79,6 +103,7 @@ async function remove(tagId) {
 
 module.exports = {
 	index,
+	getNotesForTag,
 	getTagsForNote,
 	getOne,
 	create,
