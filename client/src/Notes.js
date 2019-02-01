@@ -2,6 +2,8 @@ import React from 'react';
 import Navbar from './components/Navbar';
 import Editor from './components/Editor';
 import Card from './components/Card';
+import 'materialize-css/dist/css/materialize.min.css';
+import M from 'materialize-css';
 import moment from 'moment';
 
 class Notes extends React.Component {
@@ -10,7 +12,24 @@ class Notes extends React.Component {
 
 		this.state = {
 			notes: [],
-			sortMethod: sortByLastModifiedDesc,
+			sortIsAsc: false,
+			sortMethods: [
+				{
+					method: sortByLastModified,
+					displayName: 'Last Modified',
+					isActive: true,
+				},
+				{
+					method: sortByCreated,
+					displayName: 'Created',
+					isActive: false,
+				},
+				{
+					method: sortAlphabetically,
+					displayName: 'Name',
+					isActive: false,
+				},
+			],
 		}
 	}
 
@@ -25,10 +44,37 @@ class Notes extends React.Component {
 			});
 	}
 
+	componentDidMount() {
+		const elements = document.querySelectorAll('.sort-dropdown');
+		M.Dropdown.init(elements, {
+			alignment: 'left',
+			coverTrigger: false,
+			constrainWidth: false,
+		});
+	}
+
+	onSortClick = (e) => {
+		// Unset current method
+		let sortMethods = this.state.sortMethods.slice();
+		sortMethods.find(method => method.isActive).isActive = false;
+		sortMethods.find(method => method.displayName === e.target.dataset.target).isActive = true;
+		this.setState({ sortMethods });
+	}
+
+	onSortOrderClick = e => {
+		// toggle sort order
+		this.setState({ sortIsAsc: !this.state.sortIsAsc });
+	}
+
 	render() {
+		const activeSortMethod = this.state.sortMethods.find(method => method.isActive);
+		const adjustedSortMethod = (a, b) => {
+			return activeSortMethod.method(a, b) * (!this.state.sortIsAsc ? -1 : 1);
+		}
+
 		// create a small card for each note
 		const cards = this.state.notes
-			.sort(this.state.sortMethod)
+			.sort(adjustedSortMethod)
 			.map(note => {
 			// create simple JSX components for the tag display
 			const { 
@@ -78,6 +124,40 @@ class Notes extends React.Component {
 			<Navbar />
 			<div className='container'>
 				<div className='row' style={{marginTop: '20px'}}>
+					<div className='col s12'>
+						<h3 style={{marginTop: '0px', marginBottom: '0px', display: 'inline-block'}}>Notes</h3>
+						<div className='right'>
+							<div className=' valign-wrapper'>
+								<ul id='sort-dropdown' className='dropdown-content'>
+									{this.state.sortMethods.map(method => {
+										return (
+											<li><span 
+												onClick={this.onSortClick} 
+												data-target={method.displayName}>
+												{method.displayName}
+											</span></li>
+										);
+									})}
+								</ul>
+								<a 
+									className='sort-dropdown dropdown-trigger btn' 
+									href='#!' 
+									data-target='sort-dropdown'>
+									{this.state.sortMethods.find(method => method.isActive).displayName}
+								</a>
+								<a 
+									className='btn-floating waves-effect waves-light'  
+									style={{marginLeft: '1em'}}
+									onClick={this.onSortOrderClick}>
+									<i className='material-icons'>
+										{this.state.sortIsAsc ? 'arrow_upward' : 'arrow_downward'}
+									</i>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div className='row'>
 					{cards}
 				</div>
 				<h4>
@@ -130,17 +210,13 @@ function sortByLastModifiedDesc(a, b) {
 	return sortByLastModified(b, a);
 }
 
-function sortAlphabeticallyAsc(a, b) {
+function sortAlphabetically(a, b) {
 	if (a.title.toLowerCase() < b.title.toLowerCase()) {
 		return -1;
 	} else if (a.title.toLowerCase() > b.title.toLowerCase()) {
 		return 1;
 	}
 	return 0;
-}
-
-function sortAlphabeticallyDesc(a, b) {
-	return -1 * sortAlphabeticallyAsc(a, b)
 }
 
 export default Notes;
