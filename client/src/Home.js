@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { get } from 'object-path';
 import Navbar from './components/Navbar';
 
 class Home extends React.Component {
@@ -54,4 +56,9 @@ class Home extends React.Component {
 	}
 }
 
-export default Home;
+export default connect(state => {
+	console.log(state);
+	return {
+		hello: get(state, 'test.names'),
+	};
+})(Home);
