@@ -41,7 +41,15 @@ class Tags extends React.Component {
 	openTagModal = (e) => {
 		const id = e.target.dataset.id;
 		// get notes for tag by id
+		console.log('dispatching');
+		this.props.dispatch({
+			type: 'SELECT_TAG',
+			payload: {
+				id
+			},
+		});
 
+		/*
 		fetch(`/api/tags/notes/${id}`).then(res => res.json()).then(data => {
 			let selectedTag = this.state.selectedTag;
 			selectedTag.notes = data.notes;
@@ -49,14 +57,16 @@ class Tags extends React.Component {
 		}).catch(err => {
 			console.log(err);
 		});
+		*/
 
+		/*
 		this.setState({ 
 			selectedTag: this.state.tags.find(tag => tag.tag_id === Number(id)) 
 		});
+		*/
 	}
 
 	render() {
-		console.log(this.props.tags);
 		return (
 			<React.Fragment>
 				<Navbar />
@@ -71,17 +81,17 @@ class Tags extends React.Component {
 								data-target='modal1'
 								data-id={tag.tag_id}>
 								{tag.name} 
-								<span style={{marginLeft: '.5em'}}>({tag.numNotes})</span>
+								<span style={{marginLeft: '.5em'}}>({tag.associated_notes.notes.length})</span>
 							</button>
 						);
 					})}
 					<div id='modal1' className='modal'>
 						<div className='modal-content'>
-							<h4>{this.state.selectedTag && this.state.selectedTag.name}</h4>
-							<p>{this.state.selectedTag && this.state.selectedTag.description}</p>
+							<h4>{this.props.selectedTag && this.props.selectedTag.name}</h4>
+							<p>{this.props.selectedTag && this.props.selectedTag.description}</p>
 							<h5>Associated Notes</h5>
-							{this.state.selectedTag.notes && this.state.selectedTag.notes.length && (
-								this.state.selectedTag.notes.map(note => <p>{note.title}</p>)
+							{this.props.selectedTag.associated_notes && this.props.selectedTag.associated_notes.length && (
+								this.props.selectedTag.associated_notes.map(note => <p>{note.title}</p>)
 							) || <span className='grey-text'>No associated notes</span>}
 						</div>
 						<div className='modal-footer'>
@@ -97,4 +107,5 @@ class Tags extends React.Component {
 
 export default connect(state => ({
 	tags: get(state, 'tags.results', []),
+	selectedTag: get(state, 'tags.tag', {}),
 }))(Tags);
