@@ -1,4 +1,6 @@
 import { combineReducers } from 'redux';
-import test from './test';
+import tags from './tags';
 
-export default combineReducers({ test });
+export default combineReducers({ 
+	tags,
+});

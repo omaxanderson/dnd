@@ -108,7 +108,6 @@ function App() {
 function PrivateRoute({ component: Component, ...rest }) {
 	//console.log(Auth);
 	//console.log(Auth.accessToken);
-	console.log(rest);
 	return (
 		<Route
 			{...rest}

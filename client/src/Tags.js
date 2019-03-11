@@ -1,4 +1,6 @@
 import React from 'react';
+import { get } from 'object-path';
+import { connect } from 'react-redux';
 import Navbar from './components/Navbar';
 import 'materialize-css/dist/css/materialize.min.css';
 import M from 'materialize-css';
@@ -17,7 +19,13 @@ class Tags extends React.Component {
 	componentDidMount() {
 		fetch('/api/tags').then(res => res.json()).then(data => {
 			if (data.metadata.numResults) {
-				this.setState({ tags: data.tags });
+				//this.setState({ tags: data.tags });
+				this.props.dispatch({
+					type: 'SET_TAGS', 
+					payload: {
+						tags: data.tags,
+					},
+				});
 			}
 		})
 		.catch(err => {
@@ -48,11 +56,12 @@ class Tags extends React.Component {
 	}
 
 	render() {
+		console.log(this.props.tags);
 		return (
 			<React.Fragment>
 				<Navbar />
 				<div className='container'>
-					{this.state.tags.map(tag => {
+					{this.props.tags.map(tag => {
 						return (
 							<button 
 								className='chip hoverable modal-trigger'
@@ -86,4 +95,6 @@ class Tags extends React.Component {
 	}	
 }
 
-export default Tags;
+export default connect(state => ({
+	tags: get(state, 'tags.results', []),
+}))(Tags);

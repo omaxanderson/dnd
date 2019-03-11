@@ -27,9 +27,21 @@ class Home extends React.Component {
 					</div>
 				</div>
 			</div>
+			<button onClick={ this.reducerTest }>Reducer Test</button>
 			</React.Fragment>
 		);
 	}
+
+	reducerTest = id => {
+		console.log('test');
+		this.props.dispatch({
+			type: 'TEST_ACTION',
+			payload: {
+				id,
+				content: 'here\'s my payload',
+			},
+		});
+	};
 
 	test(e) {
 		e.preventDefault();
@@ -56,9 +68,6 @@ class Home extends React.Component {
 	}
 }
 
-export default connect(state => {
-	console.log(state);
-	return {
-		hello: get(state, 'test.names'),
-	};
-})(Home);
+export default connect(state => ({
+	names: get(state, 'test.names'),
+}))(Home);
