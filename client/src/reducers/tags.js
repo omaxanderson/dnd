@@ -11,12 +11,11 @@ export default function(state = {}, action) {
 		case 'SELECT_TAG':
 			const { id } = action.payload;
 			// @TODO this find function isn't working right
-			const selectedTag = state.results.find(tag => tag.tag_id === id);
-			console.log(id);
-			console.log(selectedTag);
+			console.log(state.results);
+			const selectedTag = state.results.find(tag => tag.tag_id === Number(id));
 			return {
 				...state,
-				tag: selectedTag,
+				selectedTag,
 			}
 			break;
 		default: 

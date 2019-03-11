@@ -90,11 +90,13 @@ class Tags extends React.Component {
 							<h4>{this.props.selectedTag && this.props.selectedTag.name}</h4>
 							<p>{this.props.selectedTag && this.props.selectedTag.description}</p>
 							<h5>Associated Notes</h5>
-							{this.props.selectedTag.associated_notes && this.props.selectedTag.associated_notes.length && (
-								this.props.selectedTag.associated_notes.map(note => <p>{note.title}</p>)
-							) || <span className='grey-text'>No associated notes</span>}
+							{this.props.selectedTag.associated_notes 
+								&& this.props.selectedTag.associated_notes.notes
+								&& this.props.selectedTag.associated_notes.notes.length 
+								&& (this.props.selectedTag.associated_notes.notes.map(note => <p><a href={`/notes/${note.note_id}`}>{note.title}</a></p>)) 
+								|| <span className='grey-text'>No associated notes</span>}
 						</div>
-						<div className='modal-footer'>
+						<div className='modal-footer' style={{marginBottom: '0em'}}>
 							<a href='#!' className='modal-close waves-effect waves-green btn-flat'>Close</a>
 							<a href='#!' className='modal-close waves-effect waves-green btn-flat'>Save</a>
 						</div>
@@ -105,7 +107,8 @@ class Tags extends React.Component {
 	}	
 }
 
+
 export default connect(state => ({
 	tags: get(state, 'tags.results', []),
-	selectedTag: get(state, 'tags.tag', {}),
+	selectedTag: get(state, 'tags.selectedTag', {}),
 }))(Tags);
