@@ -1,19 +1,25 @@
 const db = require('../database/db');
 
 async function index(userId) {
-	const sql = `SELECT tag.*, COUNT(note_id) AS numNotes
+	const sql = `SELECT tag.*
 		FROM tag
 			LEFT JOIN note_tag ON note_tag.tag_id = tag.tag_id
-		WHERE user_id = ${userId}
+			LEFT JOIN note ON note_tag.note_id = note.note_id
+		WHERE tag.user_id = ${userId}
 		GROUP BY tag_id`;
 
-	const tags = await db.query(sql);
-
-	return JSON.stringify({
-		metadata: {
-			numResults: tags.length,
-		},
-		tags,
+	const results = await db.query(sql);
+	const promises = results.map(async tag => {
+		tag.associated_notes = await getNotesForTag(tag.tag_id);
+		return tag;
+	});
+	return Promise.all(promises).then(tags => {
+		return JSON.stringify({
+			metadata: {
+				numResults: tags.length,
+			},
+			tags,
+		});
 	});
 }
 
