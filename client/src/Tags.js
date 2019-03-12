@@ -112,16 +112,16 @@ class Tags extends React.Component {
 							</div>
 							{this.props.selectedTag && <p>{this.props.selectedTag.description}</p>}
 							<h5>Associated Notes</h5>
-							{this.props.selectedTag.associated_notes 
+							{(this.props.selectedTag.associated_notes 
 								&& this.props.selectedTag.associated_notes.notes
 								&& this.props.selectedTag.associated_notes.notes.length 
-								&& (this.props.selectedTag.associated_notes.notes.map(note => <p key={`${note.note_id}_association`}><a href={`/notes/${note.note_id}`}>{note.title}</a></p>)) 
+								&& (this.props.selectedTag.associated_notes.notes.map(note => <p key={`${note.note_id}_association`}><a href={`/notes/${note.note_id}`}>{note.title}</a></p>)))
 								|| <span className='grey-text'>No associated notes</span>
 							}
 						</div>
 						<div className='modal-footer'>
-							<a href='#!' className='modal-close waves-effect waves-green btn-flat'>Close</a>
-							<a onClick={ this.saveNote } className='modal-close waves-effect waves-green btn'>Save</a>
+							<button href='#!' className='modal-close waves-effect waves-green btn-flat'>Close</button>
+							<button onClick={ this.saveNote } className='modal-close waves-effect waves-green btn'>Save</button>
 						</div>
 					</div>
 
@@ -130,13 +130,13 @@ class Tags extends React.Component {
 							<p>Are you sure you want to delete this tag? Doing so will also remove all references to existing notes.</p>
 						</div>
 						<div className='modal-footer'>
-							<a href='#!' className='modal-close waves-effect waves-green btn-flat'>Cancel</a>
-							<a 
+							<button href='#!' className='modal-close waves-effect waves-green btn-flat'>Cancel</button>
+							<button 
 								onClick={ this.deleteTag } 
 								className='modal-close waves-effect waves-green btn'
 							>
 								Delete
-							</a>
+							</button>
 						</div>
 					</div>
 				</div>

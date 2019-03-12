@@ -1,6 +1,6 @@
 import React from 'react';
 import Navbar from './components/Navbar';
-import Editor from './components/Editor';
+// apparently not being used? import Editor from './components/Editor';
 import Card from './components/Card';
 import 'materialize-css/dist/css/materialize.min.css';
 import M from 'materialize-css';
@@ -82,12 +82,6 @@ class Notes extends React.Component {
 				createdAt, 
 				updatedAt,
 			} = note;
-			const dateFormat = {
-				weekday: 'short',
-				year: '2-digit',
-				month: 'short',
-				day: '2-digit',
-			};
 			const createdAtDate = moment(createdAt).calendar();
 			const updatedAtDate = moment(updatedAt).calendar();
 			const tags = note.tags && note.tags.map(tag => {
@@ -112,7 +106,7 @@ class Notes extends React.Component {
 						mSize={12}
 						cardColor={'blue-grey'}
 						textColor={'white'}
-						cardTitle={note.title}
+						cardTitle={title}
 						cardBody={body}
 						hoverable='hoverable'
 					/>
@@ -139,20 +133,19 @@ class Notes extends React.Component {
 										);
 									})}
 								</ul>
-								<a 
+								<button 
 									className='sort-dropdown dropdown-trigger btn' 
-									href='#!' 
 									data-target='sort-dropdown'>
 									{this.state.sortMethods.find(method => method.isActive).displayName}
-								</a>
-								<a 
+								</button>
+								<button 
 									className='btn-floating waves-effect waves-light'  
 									style={{marginLeft: '1em'}}
 									onClick={this.onSortOrderClick}>
 									<i className='material-icons'>
 										{this.state.sortIsAsc ? 'arrow_upward' : 'arrow_downward'}
 									</i>
-								</a>
+								</button>
 							</div>
 						</div>
 					</div>
@@ -193,6 +186,7 @@ function sortByCreated(a, b) {
 	return 0;
 }
 
+/* eslint-disable no-unused-vars */
 function sortByCreatedDesc(a, b) {
 	return sortByCreated(b, a);
 }
@@ -209,6 +203,7 @@ function sortByLastModified(a, b) {
 function sortByLastModifiedDesc(a, b) {
 	return sortByLastModified(b, a);
 }
+/* eslint-enable no-unused-vars */
 
 function sortAlphabetically(a, b) {
 	if (a.title.toLowerCase() < b.title.toLowerCase()) {
