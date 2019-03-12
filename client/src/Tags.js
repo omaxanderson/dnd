@@ -49,6 +49,10 @@ class Tags extends React.Component {
 		});
 	}
 
+	openConfirmModal = (e) => {
+
+	}
+
 	deleteTag = (e) => {
 		// can just use the selected tag
 		fetch(`/api/tags/${this.props.selectedTag.tag_id}`, {
@@ -59,6 +63,7 @@ class Tags extends React.Component {
 					type: 'DELETE_TAG',
 					payload: this.props.selectedTag,
 				});
+				M.Modal.getInstance(document.getElementById('modal1')).close();
 			}).catch(err => {
 				console.log(err);
 			});
@@ -99,8 +104,8 @@ class Tags extends React.Component {
 									className='title-edit col s10'>{this.props.selectedTag && this.props.selectedTag.name}
 								</h4>
 								<button 
-									onClick={ this.deleteTag } 
-									className='right btn-floating btn waves-effect waves-light red'
+									className='modal-trigger right btn-floating btn waves-effect waves-light red'
+									data-target='modal2'
 								>
 									<i className='material-icons'>delete</i>
 								</button>
@@ -117,6 +122,21 @@ class Tags extends React.Component {
 						<div className='modal-footer'>
 							<a href='#!' className='modal-close waves-effect waves-green btn-flat'>Close</a>
 							<a onClick={ this.saveNote } className='modal-close waves-effect waves-green btn'>Save</a>
+						</div>
+					</div>
+
+					<div id='modal2' className='modal modal-fixed-footer'>
+						<div className='modal-content'>
+							<p>Are you sure you want to delete this tag? Doing so will also remove all references to existing notes.</p>
+						</div>
+						<div className='modal-footer'>
+							<a href='#!' className='modal-close waves-effect waves-green btn-flat'>Cancel</a>
+							<a 
+								onClick={ this.deleteTag } 
+								className='modal-close waves-effect waves-green btn'
+							>
+								Delete
+							</a>
 						</div>
 					</div>
 				</div>
