@@ -37,16 +37,16 @@ class Tags extends React.Component {
 		});
 	}
 
-	openTagModal = (e) => {
+	openTagModal = async (e) => {
 		const id = e.target.dataset.id;
 		// get notes for tag by id
-		console.log('dispatching');
-		this.props.dispatch({
+		await this.props.dispatch({
 			type: 'SELECT_TAG',
 			payload: {
 				id
 			},
 		});
+		M.Modal.getInstance(document.getElementById('modal1')).open();
 	}
 
 	openConfirmModal = (e) => {
@@ -87,7 +87,7 @@ class Tags extends React.Component {
 									style={{cursor: 'pointer'}}
 									onClick={this.openTagModal}
 									key={tag.tag_id}
-									data-target='modal1'
+									data-target='testmodal1'
 									data-id={tag.tag_id}>
 									{tag.name} 
 									<span style={{marginLeft: '.5em'}}>({tag.associated_notes.notes.length})</span>
@@ -95,7 +95,7 @@ class Tags extends React.Component {
 							);
 						})}
 					</div>
-					<div id='modal1' className='modal modal-fixed-footer'>
+					<div id='modal1' className='modal modal-fixed-footer' style={{maxHeight: '100%'}}>
 						<div className='modal-content'>
 							<div className='row'>
 								<h4 contentEditable={true}
