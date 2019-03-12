@@ -18,6 +18,13 @@ export default function(state = {}, action) {
 				selectedTag,
 			}
 			break;
+		case 'DELETE_TAG':
+			const { tag_id } = action.payload;
+			console.log(state);
+			// const tags = state.tags.results.filter(tag => tag.tag_id !== tag_id);
+			return Object.assign({}, state, {
+				results: state.results.filter(tag => tag.tag_id !== tag_id),
+			});
 		default: 
 			return state;
 	}

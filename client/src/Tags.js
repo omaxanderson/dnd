@@ -37,7 +37,6 @@ class Tags extends React.Component {
 		});
 	}
 
-	// fuck this method is dumb
 	openTagModal = (e) => {
 		const id = e.target.dataset.id;
 		// get notes for tag by id
@@ -48,22 +47,22 @@ class Tags extends React.Component {
 				id
 			},
 		});
+	}
 
-		/*
-		fetch(`/api/tags/notes/${id}`).then(res => res.json()).then(data => {
-			let selectedTag = this.state.selectedTag;
-			selectedTag.notes = data.notes;
-			this.setState({ selectedTag });
-		}).catch(err => {
-			console.log(err);
-		});
-		*/
+	deleteTag = (e) => {
+		// can just use the selected tag
+		fetch(`/api/tags/${this.props.selectedTag.tag_id}`, {
+			method: 'DELETE',
+		})
+			.then(res => {
+				this.props.dispatch({
+					type: 'DELETE_TAG',
+					payload: this.props.selectedTag,
+				});
+			}).catch(err => {
+				console.log(err);
+			});
 
-		/*
-		this.setState({ 
-			selectedTag: this.state.tags.find(tag => tag.tag_id === Number(id)) 
-		});
-		*/
 	}
 
 	render() {
@@ -71,34 +70,53 @@ class Tags extends React.Component {
 			<React.Fragment>
 				<Navbar />
 				<div className='container'>
-					{this.props.tags.map(tag => {
-						return (
-							<button 
-								className='chip hoverable modal-trigger'
-								style={{cursor: 'pointer'}}
-								onClick={this.openTagModal}
-								key={tag.tag_id}
-								data-target='modal1'
-								data-id={tag.tag_id}>
-								{tag.name} 
-								<span style={{marginLeft: '.5em'}}>({tag.associated_notes.notes.length})</span>
-							</button>
-						);
-					})}
-					<div id='modal1' className='modal'>
+					<div className='row'>
+						<h4>Tags</h4>
+						{ /* @TODO add a search function? */ }
+					</div>
+					<div className='row'>
+						{this.props.tags.map(tag => {
+							return (
+								<button 
+									className='chip hoverable modal-trigger'
+									style={{cursor: 'pointer'}}
+									onClick={this.openTagModal}
+									key={tag.tag_id}
+									data-target='modal1'
+									data-id={tag.tag_id}>
+									{tag.name} 
+									<span style={{marginLeft: '.5em'}}>({tag.associated_notes.notes.length})</span>
+								</button>
+							);
+						})}
+					</div>
+					<div id='modal1' className='modal modal-fixed-footer'>
 						<div className='modal-content'>
-							<h4>{this.props.selectedTag && this.props.selectedTag.name}</h4>
-							<p>{this.props.selectedTag && this.props.selectedTag.description}</p>
+							<div className='row'>
+								<h4 contentEditable={true}
+									suppressContentEditableWarning={true}
+									style={{paddingLeft: '0px'}} 
+									className='title-edit col s10'>{this.props.selectedTag && this.props.selectedTag.name}
+								</h4>
+								<button 
+									onClick={ this.deleteTag } 
+									className='right btn-floating btn waves-effect waves-light red'
+								>
+									<i className='material-icons'>delete</i>
+								</button>
+							</div>
+							{this.props.selectedTag && <p>{this.props.selectedTag.description}</p>}
 							<h5>Associated Notes</h5>
 							{this.props.selectedTag.associated_notes 
 								&& this.props.selectedTag.associated_notes.notes
 								&& this.props.selectedTag.associated_notes.notes.length 
-								&& (this.props.selectedTag.associated_notes.notes.map(note => <p><a href={`/notes/${note.note_id}`}>{note.title}</a></p>)) 
-								|| <span className='grey-text'>No associated notes</span>}
+								&& (this.props.selectedTag.associated_notes.notes.map(note => <p key={`${note.note_id}_association`}><a href={`/notes/${note.note_id}`}>{note.title}</a></p>)) 
+								|| <span className='grey-text'>No associated notes</span>
+							}
 						</div>
-						<div className='modal-footer' style={{marginBottom: '0em'}}>
+						<div className='modal-footer'>
 							<a href='#!' className='modal-close waves-effect waves-green btn-flat'>Close</a>
-							<a href='#!' className='modal-close waves-effect waves-green btn-flat'>Save</a>
+							<a onClick={ this.saveNote } className='modal-close waves-effect waves-green btn'>Save</a>
 						</div>
 					</div>
 				</div>
