@@ -103,8 +103,32 @@ async function update(tagId) {
 
 }
 
-async function remove(tagId) {
+async function remove(userId, tagId) {
+	const sql = db.format(`DELETE FROM tag
+		WHERE user_id = ?
+		AND tag_id = ?`, 
+		[
+			userId,
+			tagId,
+		]
+	);
+	const noteTagSql = db.format(`DELETE FROM note_tag WHERE tag_id = ?`, [ tagId ]);
 
+	const result = await db.query(sql);
+	if (result.affectedRows) {
+		const noteTagResult = db.query(noteTagSql);
+	}
+	return new Promise((resolve, reject) => {
+		if (result.affectedRows) {
+			resolve(JSON.stringify({
+				status: 'success',
+			}));
+		} else {
+			reject(JSON.stringify({
+				status: 'error',
+			}));
+		}
+	});
 }
 
 module.exports = {

@@ -55,9 +55,9 @@ router.put('/', async (req, res, next) => {
 	}
 });
 
-router.delete('/', async (req, res, next) => {
+router.delete('/:tagId', async (req, res, next) => {
 	try {
-		const result = await tagsController.delete(req.session.userId);
+		const result = await tagsController.remove(req.session.userId, req.params.tagId);
 		res.send(result);
 	} catch (e) {
 		res.status(500);
