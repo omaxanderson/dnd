@@ -39,6 +39,7 @@ class Note extends React.Component {
 		this.saveIndicatorRef = React.createRef();
 	}
 
+	// @TODO convert lots of these actions to redux
 	componentDidMount() {
 		console.log('note mounted?');
 		// get our note data if this is an existing note
