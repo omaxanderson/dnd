@@ -1,4 +1,5 @@
 import React from 'react';
+import Navbar from './components/Navbar';
 
 class Campaign extends React.Component {
 	constructor(props) {
@@ -22,7 +23,12 @@ class Campaign extends React.Component {
 		console.log(this.state.campaign);
 		const { title } = this.state.campaign;
 		return (
-			<h2>{title}</h2>
+			<React.Fragment>
+				<Navbar />
+				<div className='container'>
+					<h2>{title}</h2>
+				</div>
+			</React.Fragment>
 		)
 	}
 }
