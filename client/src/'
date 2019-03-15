@@ -1,0 +1,43 @@
+import React, { Component } from 'react';
+import { get } from 'object-path';
+import { connect } from 'react-redux';
+
+// @TODO do I need this?
+import 'materialize-css/dist/css/materialize.min.css';
+import M from 'materialize-css';
+
+class Listing extends Component {
+	render() {
+		return (
+			<table className={`highlight ${this.props.center}`}>
+				<thead>
+					<tr>
+						{this.props.fieldNames.map(row => (
+							<th>{row.displayName}</th>
+						))}
+					</tr>
+				</thead>
+
+				<tbody>
+					{this.props.rows.map(row => (
+						<tr>
+							{
+								this.props.fieldNames.map(field => (<td>{row[field.field]}</td>))
+							}
+						</tr>
+					))}
+				</tbody>
+
+			</table>
+		)
+	}
+}
+
+Listing.defaultProps = {
+	fieldNames: [],
+	rows: [],
+}
+
+export default connect(state => ({
+
+}))(Listing);

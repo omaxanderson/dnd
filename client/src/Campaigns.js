@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import { connect } from 'react-redux';
+import { get } from 'object-path';
 import Card from './components/Card';
 import Navbar from './components/Navbar';
+import Listing from './components/Listing';
 
-class CampaignList extends React.Component {
+class Campaigns extends React.Component {
 	constructor(props) {
 		super(props);
 
@@ -12,11 +15,15 @@ class CampaignList extends React.Component {
 	}
 
 	componentDidMount() {
+		// this should eventually be a saga or use thunk
 		fetch('/api/campaigns')
 			.then(res => res.json())
 			.then(data => {
-				console.log(data);
-				this.setState({ campaigns: data.campaigns });
+				// this.setState({ campaigns: data.campaigns });
+				this.props.dispatch({
+					type: 'FETCH_CAMPAIGNS',
+					payload: data,
+				});
 			})
 			.catch(err => {
 				console.log(err);
@@ -38,7 +45,22 @@ class CampaignList extends React.Component {
 					/>
 				</a>
 			)
-		});;
+		});
+
+		return (
+			<Fragment>
+				<Navbar />
+				<div className='container'>
+					<h4>Campaigns</h4>
+					<Listing
+						rows={this.props.campaigns}
+						fieldNames={this.props.fieldNames}
+					/>
+				</div>
+			</Fragment>
+		)
+
+		/*
 		console.log(this.state.campaigns);
 		return (
 			<React.Fragment>
@@ -50,7 +72,11 @@ class CampaignList extends React.Component {
 				</div>
 			</React.Fragment>
 		);
+		*/
 	}
 };
 
-export default CampaignList;
+export default connect(state => ({
+	campaigns: get(state, 'campaigns.results'),
+	fieldNames: get(state, 'campaigns.metadata.fieldNames'),
+}))(Campaigns);

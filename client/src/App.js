@@ -12,8 +12,9 @@ import Home from './Home';
 import Notes from './Notes';
 import Tags from './Tags';
 import Note from './Note';
-import CampaignList from './CampaignList';
+import Campaigns from './Campaigns';
 import Campaign from './Campaign';
+import Listing from './components/Listing';
 const cookies = require('browser-cookies');
 
 
@@ -68,7 +69,9 @@ function App() {
 				<PrivateRoute path='/notes' component={ Notes } />
 				<PrivateRoute path='/tags' component={ Tags } />
 				<PrivateRoute path='/campaigns/:campaignId' component={ Campaign } />
-				<PrivateRoute path='/campaigns' component={ CampaignList } />
+				<PrivateRoute path='/campaigns' component={ Campaigns } />
+				{ /* @TODO remove this when done testing */ }
+				<PrivateRoute path='/listingTest' component={ Listing } />
 				<Route path='/login' 
 					render={props => {
 						return(
