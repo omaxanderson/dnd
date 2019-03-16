@@ -21,7 +21,7 @@ class Listing extends Component {
 							onClick={() => this.handleClick(row.id)}
 						>
 							{this.props.fieldNames.map(field => (
-								<td key={row[field.field]}>{row[field.field]}</td>
+								<td key={row[field.field]}>{row[field.alias || field.field]}</td>
 							))}
 						</tr>
 					))}
@@ -32,7 +32,7 @@ class Listing extends Component {
 	}
 
 	handleClick = (id) => {
-		alert('opening /campaigns/' + id);
+		window.location = `/campaigns/${id}`;
 	}
 }
 
