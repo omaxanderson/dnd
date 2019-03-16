@@ -3,20 +3,48 @@ import Db from '../database/db';
 
 export default class Query {
 
-	id;
-	table;
-	joins = [];
-	where = [];
-	select = [];
-	group = [];
-	order = [];
+	_id;
+	_table;
+	_joins = [];
+	_where = [];
+	_select = [];
+	_group = [];
+	_order = [];
 
-	set id(id) {
-		this.id = id;
+	constructor(id) {
+		this._id = id;
 	}
 
-	get id() {
-		return this.id;
+	addJoin(join) {
+		this._joins.push(join);
+	}
+
+	addWhere(where) {
+		this._where.push(where);
+	}
+
+	addSelect(select) {
+		this._select.push(select);
+	}
+	
+	addGroup(group) {
+		this._group.push(group);
+	}
+
+	addOrder(order) {
+		this._order.push(order);
+	}
+
+	set table(table) {
+		this._table = table;
+	}
+
+	// Getters and setters
+	set id(id) {
+		this._id = id;
+	}
+
+	execute() {
 	}
 
 }

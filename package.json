@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "rm -rf dist && webpack --mode development",
-    "start": "nodemon dist/server.js --ignore client/",
+    "start": "nodemon --exec babel-node app.js --ignore client/",
     "start3": "node ./dist/server.js",
     "start2": "nodemon --experimental-modules app.js --ignore client/ --exec babel-node",
     "server": "nodemon index.js --ignore client"

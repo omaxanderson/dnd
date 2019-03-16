@@ -1,12 +1,12 @@
-const mysql = require('mysql');
-const dbconfig = require('./dbconfig');
+import mysql from 'mysql';
+import dbconfig from './dbconfig';
 
-class db {
-	format(sql, params) {
+export default class db {
+	static format(sql, params) {
 		return mysql.format(sql, params);
 	}
 
-	query(sql) {
+	static query(sql) {
 		return new Promise((resolve, reject) => {
 			const connection = mysql.createConnection(dbconfig);
 			connection.connect();
@@ -22,7 +22,7 @@ class db {
 		});
 	}
 
-	fetchOne(sql) {
+	static fetchOne(sql) {
 		return new Promise((resolve, reject) => {
 			const connection = mysql.createConnection(dbconfig);
 			connection.connect();
@@ -38,5 +38,3 @@ class db {
 		});
 	}
 }
-
-module.exports = new db();

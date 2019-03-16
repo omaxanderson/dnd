@@ -1,51 +1,21 @@
 import db from '../database/db';
-import Query from '../classes/Query';
-// const db = require('../database/db');
-// const UserCampaigns = require('../classes/UserCampaigns');
-// const Query = require('../classes/Query');
+import UserCampaigns from '../classes/UserCampaigns';
 
-async function index(userId) {
-	const query = new Query();
-	query.setId(1);
-	const fields = [
-		{
-			field: 'campaign_id',
-			displayName: 'Campaign ID',
-		},
-		{
-			field: 'title',
-			displayName: 'Title',
-		},
-		{
-			field: 'created_at',
-			displayName: 'Created',
-		},
-	];
+export async function index(userId) {
+	const service = new UserCampaigns(userId);
+	const campaigns = await service.execute();
 
-	const sql = db.format(`SELECT
-		${fields.map(item => item.field).join(',')}
-		FROM campaign
-		WHERE user_id = ?`, [userId]);
-	console.log(sql);
-
-
-	const campaigns = await db.query(sql);
-	return JSON.stringify({
+	return {
 		metadata: {
 			numResults: campaigns.length,
-			fieldNames: fields,
-			max: 'test',
+			fieldNames: service.fields,
 		},
 		campaigns,
-	});
+	};
 }
 
-async function getOne(userId, campaignId) {
-	const results = JSON.parse(await index(userId));
-	return JSON.stringify(results.campaigns.find(campaign => campaign.campaign_id = campaignId));
+export async function getOne(userId, campaignId) {
+	const results = await index(userId);
+	return results.campaigns.find(campaign => campaign.campaign_id = campaignId);
 }
 
-module.exports = {
-	index,
-	getOne,
-}
