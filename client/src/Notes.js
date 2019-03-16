@@ -86,7 +86,7 @@ class Notes extends React.Component {
 			const createdAtDate = moment(createdAt).calendar();
 			const updatedAtDate = moment(updatedAt).calendar();
 			const tags = note.tags && note.tags.map(tag => {
-				return <div className='chip'>{tag.name}</div>;
+				return <div className='chip' key={tag.name}>{tag.name}</div>;
 			});
 			const body = (
 				<div>
@@ -126,7 +126,7 @@ class Notes extends React.Component {
 								<ul id='sort-dropdown' className='dropdown-content'>
 									{this.state.sortMethods.map(method => {
 										return (
-											<li><span 
+											<li key={method.displayName}><span 
 												onClick={this.onSortClick} 
 												data-target={method.displayName}>
 												{method.displayName}

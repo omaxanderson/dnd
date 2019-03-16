@@ -1,8 +1,9 @@
-const db = require('../database/db');
+// const db = require('../database/db');
+import Db from '../database/db';
 const tagsController = require('./tags');
 
 async function getNoteOwner(noteId) {
-	const noteOwner = await db.fetchOne(db.format(`SELECT user_id
+	const noteOwner = await Db.fetchOne(Db.format(`SELECT user_id
 		FROM note
 		WHERE note_id = ?`, [noteId]));
 	return noteOwner.user_id;
@@ -26,7 +27,7 @@ async function index(userId) {
 		AND active = 1
 		GROUP BY note.note_id`;
 
-	let result = await db.query(sql);
+	let result = await Db.query(sql);
 	result.forEach(item => {
 		result.test = 'heyyy';
 	});
@@ -58,7 +59,7 @@ async function addTagById(noteId, tagId) {
 	const sql = `INSERT INTO note_tag
 		VALUES (${tagId}, ${noteId})`;
 
-	const result = await db.query(sql);
+	const result = await Db.query(sql);
 
 	return new Promise((resolve, reject) => {
 		if (result.affectedRows) {
@@ -79,7 +80,7 @@ async function removeTagById(noteId, tagId) {
 		WHERE note_id = ${noteId}
 		AND tag_id = ${tagId}`;
 
-	const result = await db.query(sql);
+	const result = await Db.query(sql);
 
 	return new Promise((resolve, reject) => {
 		if (result.affectedRows) {
@@ -112,10 +113,10 @@ async function getOne(userId, noteId) {
 }
 
 async function create(userId, reqBody) {
-	const sql = db.format(`INSERT INTO note (user_id, content, title)
+	const sql = Db.format(`INSERT INTO note (user_id, content, title)
 		VALUES (${userId}, ?, ?)`, [reqBody.content, reqBody.title]);
 	console.log(sql);
-	const result = await db.query(sql);
+	const result = await Db.query(sql);
 	console.log(result);
 	if (result.affectedRows) {
 		return JSON.stringify({
@@ -142,7 +143,7 @@ async function update(userId, noteId, changes) {
 		});
 	}
 
-	const sql = db.format(`UPDATE note
+	const sql = Db.format(`UPDATE note
 		SET updated_at = CURRENT_TIMESTAMP,
 			content = ?,
 			title = ?
@@ -150,7 +151,7 @@ async function update(userId, noteId, changes) {
 		AND user_id = ?`, [changes.content, changes.title, noteId, userId]
 	);
 
-	const result = await db.query(sql);
+	const result = await Db.query(sql);
 	console.log(result);
 
 	return JSON.stringify({
@@ -164,11 +165,11 @@ async function remove(userId, noteId) {
 			error: 'This note doesn\'t belong to you!',
 		});
 	}
-	const sql = db.format(`UPDATE note
+	const sql = Db.format(`UPDATE note
 		SET active = 0
 		WHERE note_id = ?
 		AND user_id = ?`, [noteId, userId]);
-	const result = await db.query(sql);
+	const result = await Db.query(sql);
 	if (!result.affectedRows) {
 		return JSON.stringify({
 			error: `Note ID ${noteId} not found!`,
