@@ -35,7 +35,7 @@ class Navbar extends React.Component {
 										</a></li>
 										<li><a href='/notes'>Notes</a></li>
 										<li><a href='/tags'>Tags</a></li>
-										<li><a href='#!'>Item 3</a></li>
+										<li><a href='/campaigns'>Campaigns</a></li>
 									</React.Fragment>
 								)}
 								{ !this.props.notLoggedIn 

@@ -1,4 +1,5 @@
 const db = require('../database/db');
+const UserCampaigns = require('../classes/UserCampaigns');
 
 async function index(userId) {
 	const fields = [
