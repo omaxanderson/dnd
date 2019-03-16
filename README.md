@@ -13,3 +13,7 @@ Front End
 React
 	- Prod: probably just use `npm run build` and serve that directory statically
 	- Dev: `npm start` to simply create the react dev server that watches for changes
+
+```Configuration settings
+Ensure you have a dbconfig that is simply an object export.
+Include the `dateStrings: true` field in the object to ensure datestrings come out looking alright
