@@ -15,7 +15,11 @@ class Listing extends Component {
 
 				<tbody>
 					{this.props.rows.map(row => (
-						<tr key={`row_${row.id}`}>
+						<tr 
+							className='list-row' 
+							key={`row_${row.id}`}
+							onClick={() => this.handleClick(row.id)}
+						>
 							{this.props.fieldNames.map(field => (
 								<td key={row[field.field]}>{row[field.field]}</td>
 							))}
@@ -25,6 +29,10 @@ class Listing extends Component {
 
 			</table>
 		)
+	}
+
+	handleClick = (id) => {
+		alert('opening /campaigns/' + id);
 	}
 }
 

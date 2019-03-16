@@ -1,7 +1,12 @@
-const db = require('../database/db');
-const UserCampaigns = require('../classes/UserCampaigns');
+import db from '../database/db';
+import Query from '../classes/Query';
+// const db = require('../database/db');
+// const UserCampaigns = require('../classes/UserCampaigns');
+// const Query = require('../classes/Query');
 
 async function index(userId) {
+	const query = new Query();
+	query.setId(1);
 	const fields = [
 		{
 			field: 'campaign_id',
@@ -17,7 +22,8 @@ async function index(userId) {
 		},
 	];
 
-	const sql = db.format(`SELECT ${fields.map(item => item.field).join(',')}
+	const sql = db.format(`SELECT
+		${fields.map(item => item.field).join(',')}
 		FROM campaign
 		WHERE user_id = ?`, [userId]);
 	console.log(sql);
@@ -28,6 +34,7 @@ async function index(userId) {
 		metadata: {
 			numResults: campaigns.length,
 			fieldNames: fields,
+			max: 'test',
 		},
 		campaigns,
 	});
