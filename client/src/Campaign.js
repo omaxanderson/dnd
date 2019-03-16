@@ -19,6 +19,23 @@ class Campaign extends React.Component {
 			});
 	}
 
+	testPost() {
+		fetch(`/api/campaigns`, {
+			method: 'POST',
+			body: JSON.stringify({
+				title: 'test',
+			}),
+			mode: 'cors',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
+			.then(res => res.json())
+			.then(data => {
+				console.log(data);
+			});
+	}
+
 	render() {
 		console.log(this.state.campaign);
 		const { title } = this.state.campaign;
@@ -27,6 +44,7 @@ class Campaign extends React.Component {
 				<Navbar />
 				<div className='container'>
 					<h2>{title}</h2>
+					<button className='btn' onClick={this.testPost}>Send</button>
 				</div>
 			</React.Fragment>
 		)

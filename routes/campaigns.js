@@ -1,16 +1,20 @@
 const express = require('express');
 const router = express.Router();
-//const campaignController = require('../controllers/campaign');
-import { index, getOne } from '../controllers/campaign';
+import * as Campaign from '../controllers/campaign';
 
 router.get('/', async (req, res, next) => {
-	const result = await index(req.session.userId);
+	const result = await Campaign.index(req.session.userId);
 	res.send(JSON.stringify(result));
 });
 
 router.get('/:campaignId', async (req, res, next) => {
-	const result = await getOne(req.session.userId, req.params.campaignId);
+	const result = await Campaign.getOne(req.session.userId, req.params.campaignId);
 	res.send(JSON.stringify(result));
+});
+
+router.post('/', async (req, res, next) => {
+	const result = await Campaign.create(req.session.userId, req.body);
+	res.send(`{"msg":"works"}`);
 });
 
 module.exports = router;

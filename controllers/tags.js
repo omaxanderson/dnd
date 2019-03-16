@@ -1,4 +1,5 @@
-const db = require('../database/db');
+//const Db = require('../database/db');
+import Db from '../database/db';
 
 async function index(userId) {
 	const sql = `SELECT tag.*
@@ -8,7 +9,7 @@ async function index(userId) {
 		WHERE tag.user_id = ${userId}
 		GROUP BY tag_id`;
 
-	const results = await db.query(sql);
+	const results = await Db.query(sql);
 	const promises = results.map(async tag => {
 		tag.associated_notes = await getNotesForTag(tag.tag_id);
 		return tag;
@@ -24,7 +25,7 @@ async function index(userId) {
 }
 
 async function getNotesForTag(tagId) {
-	const sql = db.format(
+	const sql = Db.format(
 		`SELECT note_tag.note_id, note.title
 		FROM note_tag
 			LEFT JOIN note ON note.note_id = note_tag.note_id
@@ -33,7 +34,7 @@ async function getNotesForTag(tagId) {
 
 	// @TODO better error handling
 	try {
-		const result = await db.query(sql);
+		const result = await Db.query(sql);
 		return {
 			metadata: {
 				numRows: result.length,
@@ -46,7 +47,7 @@ async function getNotesForTag(tagId) {
 }
 
 async function getTagsForNote(noteId) {
-	const sql = db.format(`SELECT tag.tag_id, name, IF(note_tag.note_id IS NOT NULL, 1, 0) AS is_applied
+	const sql = Db.format(`SELECT tag.tag_id, name, IF(note_tag.note_id IS NOT NULL, 1, 0) AS is_applied
 		FROM tag
 			LEFT JOIN note_tag ON tag.tag_id = note_tag.tag_id 
 				AND note_id = ?`, 
@@ -54,7 +55,7 @@ async function getTagsForNote(noteId) {
 	);
 
 	try {
-		const result = await db.query(sql);
+		const result = await Db.query(sql);
 		return result;
 	} catch (e) {
 		return e;
@@ -62,17 +63,17 @@ async function getTagsForNote(noteId) {
 }
 
 async function getOne(tagId) {
-	const sql = db.format(`SELECT *
+	const sql = Db.format(`SELECT *
 		FROM tag
 		WHERE tag_id = ?`, [tagId]);
 
-	const result = await db.query(sql);
+	const result = await Db.query(sql);
 
 	return result;
 }
 
 async function create(userId, data) {
-	const sql = db.format(`INSERT INTO tag
+	const sql = Db.format(`INSERT INTO tag
 		(user_id, name, description) VALUES (
 			${userId}, 
 			?,
@@ -82,7 +83,7 @@ async function create(userId, data) {
 			]
 	);
 
-	const result = await db.query(sql);
+	const result = await Db.query(sql);
 	const tag = await getOne(result.insertId);
 
 	return new Promise((resolve, reject) => {
@@ -104,7 +105,7 @@ async function update(tagId) {
 }
 
 async function remove(userId, tagId) {
-	const sql = db.format(`DELETE FROM tag
+	const sql = Db.format(`DELETE FROM tag
 		WHERE user_id = ?
 		AND tag_id = ?`, 
 		[
@@ -112,11 +113,11 @@ async function remove(userId, tagId) {
 			tagId,
 		]
 	);
-	const noteTagSql = db.format(`DELETE FROM note_tag WHERE tag_id = ?`, [ tagId ]);
+	const noteTagSql = Db.format(`DELETE FROM note_tag WHERE tag_id = ?`, [ tagId ]);
 
-	const result = await db.query(sql);
+	const result = await Db.query(sql);
 	if (result.affectedRows) {
-		const noteTagResult = db.query(noteTagSql);
+		const noteTagResult = Db.query(noteTagSql);
 	}
 	return new Promise((resolve, reject) => {
 		if (result.affectedRows) {

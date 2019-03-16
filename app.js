@@ -65,20 +65,6 @@ const apiMiddleware = (req, res, next) => {
 		console.log('post request');
 		next();
 	}
-
-	/*
-	if (!req.session.views) {
-		req.session.views = 1;
-	} else {
-		req.session.views++;
-	}
-	if (!req.cookies.accessToken) {
-		res.send('unauthorized');
-	} else {
-		// check that the session cookie is valid
-		next();
-	}
-	*/
 };
 
 const loginRegisterMiddleware = (req, res, next) => {

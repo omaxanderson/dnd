@@ -1,5 +1,6 @@
 import db from '../database/db';
 import UserCampaigns from '../classes/UserCampaigns';
+import Campaign from '../classes/Campaign';
 
 export async function index(userId) {
 	const service = new UserCampaigns(userId);
@@ -23,3 +24,9 @@ export async function getOne(userId, campaignId) {
 		};
 }
 
+export async function create(userId, payload) {
+	const service = new Campaign(userId);
+	const result = await service.createCampaign(payload)
+
+	return result;
+}

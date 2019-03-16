@@ -15,7 +15,7 @@ router.get('/:noteId', async (req, res, next) => {
 		res.send(note);
 	} catch (e) {
 		console.log('oh noooo');
-		console.log(err);
+		console.log(e);
 		res.send('bad');
 	}
 });
