@@ -20,13 +20,6 @@ class Campaign extends React.Component {
 				campaignId: this.props.match.params.campaignId,
 			},
 		});
-		/*
-		fetch(`/api/campaigns/${this.props.match.params.campaignId}`)
-			.then(res => res.json())
-			.then(campaign => {
-				this.setState({campaign});
-			});
-		*/
 	}
 
 	testPost = () => {
@@ -35,6 +28,9 @@ class Campaign extends React.Component {
 			payload: {
 				campaignId: this.props.match.params.campaignId,
 			}
+		});
+		this.props.dispatch({
+			type: 'NOTES_FETCH_REQUESTED',
 		});
 	}
 
