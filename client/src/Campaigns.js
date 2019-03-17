@@ -15,7 +15,11 @@ class Campaigns extends React.Component {
 	}
 
 	componentDidMount() {
+		this.props.dispatch({
+			type: 'CAMPAIGNS_FETCH_REQUESTED',
+		});
 		// this should eventually be a saga or use thunk
+		/*
 		fetch('/api/campaigns')
 			.then(res => res.json())
 			.then(data => {
@@ -28,6 +32,7 @@ class Campaigns extends React.Component {
 			.catch(err => {
 				console.log(err);
 			});
+		*/
 	}
 
 	render() {
