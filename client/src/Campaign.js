@@ -65,6 +65,6 @@ class Campaign extends React.Component {
 }
 
 export default connect(state => ({
-	campaignNotes: get(state, 'campaigns.campaign.notes', []),
-	campaign: get(state, 'campaigns.campaign', {}),
+	campaignNotes: get(state, 'campaign.notes', []),
+	campaign: get(state, 'campaign', {}),
 }))(Campaign);

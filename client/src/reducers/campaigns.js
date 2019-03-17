@@ -17,16 +17,6 @@ export default function(state = {}, action) {
 			return {
 				...state,
 			}
-		case 'CAMPAIGN_FETCH_SUCCEEDED':
-			console.log(action.type);
-			return {
-				...state,
-				campaign: action.payload
-			}
-		case 'CAMPAIGN_FETCH_FAILED':
-			return {
-				...state,
-			}
 		default:
 			return state;
 	}
